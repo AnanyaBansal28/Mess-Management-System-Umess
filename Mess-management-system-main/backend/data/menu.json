@@ -1,0 +1,33 @@
+{
+  "breakfast": [
+    {
+      "name": "Poha",
+      "price": 15,
+      "category": "Veg"
+    },
+    {
+      "name": "Sambar",
+      "price": 10,
+      "category": "Veg"
+    },
+    {
+      "name": "dosa",
+      "price": "100",
+      "category": "Veg"
+    }
+  ],
+  "lunch": [
+    {
+      "name": "Dal",
+      "price": 20,
+      "category": "Veg"
+    }
+  ],
+  "dinner": [
+    {
+      "name": "Chapati",
+      "price": 20,
+      "category": "Veg"
+    }
+  ]
+}

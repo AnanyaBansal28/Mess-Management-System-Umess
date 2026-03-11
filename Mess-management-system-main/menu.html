@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Management</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#333;}
+header{background:white;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,0.1);position:sticky;top:0;}
+header h2{margin:0;font-size:20px;}
+.btn{background:#ff4500;color:white;padding:8px 12px;border-radius:6px;text-decoration:none;}
+.wrapper{max-width:1100px;margin:20px auto;padding:10px;}
+.container{display:flex;gap:20px;}
+.sidebar{width:250px;background:white;padding:16px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+.menu-card{border:1px solid #ddd;border-radius:8px;padding:10px;margin-bottom:10px;cursor:pointer;display:flex;justify-content:space-between;}
+.menu-card:hover{background:#fff4ee;border-color:#ff4500;}
+.content{flex:1;}
+.panel{background:white;border-radius:10px;padding:20px;box-shadow:0 4px 10px rgba(0,0,0,0.1);display:none;}
+.panel.active{display:block;}
+.item-card{border:1px solid #ddd;border-radius:8px;padding:12px;background:#fafafa;margin-bottom:10px;display:flex;justify-content:space-between;}
+.badge{background:#d4f5d4;color:#2e7d32;padding:2px 8px;border-radius:20px;font-size:12px;}
+.add-btn{display:inline-block;background:red;color:white;padding:8px 12px;border-radius:6px;margin-top:8px;cursor:pointer;}
+.form{display:none;margin-top:10px;border-top:1px solid #ddd;padding-top:10px;}
+.form input,.form select{width:100%;padding:8px;margin-bottom:8px;border:1px solid #ccc;border-radius:6px;}
+.form button{width:100%;background:#ff4500;color:white;border:none;padding:8px;border-radius:6px;cursor:pointer;}
+
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px;}
+.stat{background:white;border-radius:10px;padding:16px;flex:1;min-width:200px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);}
+</style>
+</head>
+
+<body>
+
+<header>
+<div style="display:flex;align-items:center;gap:10px;">
+<a href="admin_dashboard.html" style="color:#ff4500;text-decoration:none;font-size:18px;">
+<i class="fa-solid fa-arrow-left"></i>
+</a>
+<h2><i class="fa-solid fa-utensils" style="color:#ff4500"></i> Menu Management</h2>
+</div>
+<a href="#" class="btn">+ New Menu</a>
+</header>
+
+<div class="wrapper">
+
+<div class="container">
+
+<div class="sidebar">
+<h3><i class="fa-solid fa-utensils" style="color:#ff4500"></i> Today's Menus</h3>
+<div class="menu-card" onclick="showPanel('breakfast')"><span>Breakfast</span><span id="breakfastPrice">₹25</span></div>
+<div class="menu-card" onclick="showPanel('lunch')"><span>Lunch</span><span id="lunchPrice">₹60</span></div>
+<div class="menu-card" onclick="showPanel('dinner')"><span>Dinner</span><span id="dinnerPrice">₹80</span></div>
+</div>
+
+<div class="content">
+
+<div id="breakfast" class="panel active">
+<h3>Breakfast</h3>
+<div id="breakfastItems"></div>
+<div class="add-btn" onclick="toggleForm('form-breakfast')">+ Add Item</div>
+<div id="form-breakfast" class="form">
+<input type="text" placeholder="Item Name">
+<input type="text" placeholder="Description">
+<input type="number" placeholder="Price (₹)">
+<select><option>Veg</option><option>Non-Veg</option></select>
+<button onclick="addItem('breakfast')">Add Item</button>
+</div>
+</div>
+
+<div id="lunch" class="panel">
+<h3>Lunch</h3>
+<div id="lunchItems"></div>
+<div class="add-btn" onclick="toggleForm('form-lunch')">+ Add Item</div>
+<div id="form-lunch" class="form">
+<input type="text" placeholder="Item Name">
+<input type="text" placeholder="Description">
+<input type="number" placeholder="Price (₹)">
+<select><option>Veg</option><option>Non-Veg</option></select>
+<button onclick="addItem('lunch')">Add Item</button>
+</div>
+</div>
+
+<div id="dinner" class="panel">
+<h3>Dinner</h3>
+<div id="dinnerItems"></div>
+<div class="add-btn" onclick="toggleForm('form-dinner')">+ Add Item</div>
+<div id="form-dinner" class="form">
+<input type="text" placeholder="Item Name">
+<input type="text" placeholder="Description">
+<input type="number" placeholder="Price (₹)">
+<select><option>Veg</option><option>Non-Veg</option></select>
+<button onclick="addItem('dinner')">Add Item</button>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- FOOTER / STATS SECTION ADDED -->
+<div class="stats">
+<div class="stat"><h3 style="color:#e02424">3</h3><p>Active Menus</p></div>
+<div class="stat"><h3 style="color:#129b12">₹110</h3><p>Avg. Daily Cost</p></div>
+<div class="stat"><h3 style="color:#2463eb">24</h3><p>Menu Items</p></div>
+<div class="stat"><h3 style="color:#7c3aed">85%</h3><p>Satisfaction</p></div>
+</div>
+
+</div>
+
+<script>
+
+let menu={
+breakfast:[],
+lunch:[],
+dinner:[]
+}
+
+async function loadMenu(){
+
+const res = await fetch("/api/menu")
+
+menu = await res.json()
+
+renderMenu()
+
+}
+
+
+function showPanel(id){
+document.querySelectorAll(".panel")
+.forEach(p=>p.style.display="none")
+document.getElementById(id).style.display="block"
+}
+
+function toggleForm(id){
+let form=document.getElementById(id)
+form.style.display=form.style.display==="block"?"none":"block"
+}
+
+
+function renderMenu(){
+
+["breakfast","lunch","dinner"].forEach(type=>{
+
+let container=document.getElementById(type+"Items")
+
+container.innerHTML=""
+
+let total=0
+
+menu[type].forEach((item,index)=>{
+
+total+=parseInt(item.price)
+
+container.innerHTML+=`
+
+<div class="item-card">
+
+<div>
+
+${item.name}
+<span class="badge">${item.category}</span>
+<br>
+<small>₹${item.price}</small>
+
+</div>
+
+<div>
+
+<i class="fa-solid fa-pen-to-square"
+onclick="editItem('${type}',${index})"></i>
+
+<i class="fa-solid fa-trash"
+style="color:red"
+onclick="deleteItem('${type}',${index})"></i>
+
+</div>
+
+</div>
+
+`
+
+})
+
+document.getElementById(type+"Price")
+.innerText="₹"+total
+
+})
+
+}
+
+
+
+async function addItem(type){
+
+let form=document.getElementById("form-"+type)
+
+let name=form.children[0].value
+let price=form.children[2].value
+let category=form.children[3].value
+
+
+await fetch("/api/menu/add",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+type,
+name,
+price,
+category
+})
+
+})
+
+loadMenu()
+
+}
+
+
+
+async function deleteItem(type,index){
+
+await fetch("/api/menu/delete",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+type,
+index
+})
+
+})
+
+loadMenu()
+
+}
+
+
+
+async function editItem(type,index){
+
+let item=menu[type][index]
+
+let name=prompt("Name",item.name)
+let price=prompt("Price",item.price)
+
+await fetch("/api/menu/edit",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+type,
+index,
+name,
+price
+})
+
+})
+
+loadMenu()
+
+}
+
+
+loadMenu()
+
+</script>
+
+</body>
+</html>

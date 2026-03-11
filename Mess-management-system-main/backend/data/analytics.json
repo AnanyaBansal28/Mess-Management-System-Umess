@@ -1,0 +1,20 @@
+[
+  {
+    "date": "2024-12-31",
+    "breakfast": 190,
+    "lunch": 220,
+    "dinner": 195
+  },
+  {
+    "date": "2024-12-30",
+    "breakfast": 175,
+    "lunch": 210,
+    "dinner": 185
+  },
+  {
+    "date": "2024-12-29",
+    "breakfast": 165,
+    "lunch": 200,
+    "dinner": 175
+  }
+]

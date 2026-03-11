@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Feedback System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+    header {
+      background: #fff;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h2 { 
+      margin: 0; 
+      font-size: 20px; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px;
+      color: #444;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropbtn {
+      padding: 8px 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;  
+      background-color: #fff;
+      min-width: 160px;
+      box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      z-index: 1;
+    }
+    .dropdown-content a {
+      color: #333;
+      padding: 10px 14px;
+      text-decoration: none;
+      display: block;
+      font-size: 14px;
+    }
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 40px 100px;
+    }
+    .stat-card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .feedback {
+      background: #fff;
+      padding: 16px;
+      margin: 25px 100px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .tags span {
+      background: #eef2ff;
+      color: #444;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 5px;
+      margin-left: 4px;
+    }
+    .stars {color: gold; font-size: 14px;}
+    .buttons {margin-top: 10px;}
+    .buttons button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-right: 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .admin-response {
+      margin-top: 10px;
+      background: #eaf3ff;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <a href="admin_dashboard.html" style="text-decoration:none; font-size:18px;">
+        <i class="fa-solid fa-arrow-left"></i>
+      </a>
+      <h2><i class="fa-solid fa-message" style="color: blue;"></i> Feedback System</h2>
+    </div>
+
+    <div class="dropdown">
+      <button class="dropbtn"> All Feedback <i class="fa-solid fa-caret-down"></i></button>
+      <div class="dropdown-content" id="filterMenu">
+        <a data-filter="all"><i class="fa-solid fa-list"></i> All Feedback</a>
+        <a data-filter="NEW"><i class="fa-solid fa-star"></i> New</a>
+        <a data-filter="REVIEWED"><i class="fa-solid fa-check"></i> Reviewed</a>
+        <a data-filter="RESPONDED"><i class="fa-solid fa-reply"></i> Responded</a>
+      </div>
+    </div>
+  </header>
+
+  <div id="feedbackList">
+
+    <div class="feedback" data-status="NEW">
+      <strong>Vrinda Kapoor (0321)</strong>
+      <span class="tags status"><span>NEW</span><span>FOOD QUALITY</span></span>
+      <p>Lunch - 01-09-2025 <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></p>
+      <p>Excellent paneer curry today! The spices were perfectly balanced and the rice was cooked well.</p>
+      <div class="buttons">
+        <button class="reviewBtn"><i class="fa-solid fa-check"></i> Mark as Reviewed</button>
+        <button class="replyBtn"><i class="fa-solid fa-reply"></i> Respond</button>
+      </div>
+    </div>
+
+    <div class="feedback" data-status="REVIEWED">
+      <strong>Ananya Bansal (0259)</strong>
+      <span class="tags status"><span>REVIEWED</span><span>FOOD QUALITY</span></span>
+      <p>Breakfast - 01-09-2025 <span class="stars">&#9733;&#9733;&#9733;</span></p>
+      <p>The poha was okay but could use more vegetables.</p>
+      <div class="buttons"><button class="replyBtn"><i class="fa-solid fa-reply"></i> Respond</button></div>
+    </div>
+
+    <div class="feedback" data-status="RESPONDED">
+      <strong>Gurasees (0293)</strong>
+      <span class="tags status"><span>RESPONDED</span><span>HYGIENE</span></span>
+      <p>Dinner - 04-09-2025 <span class="stars">&#9733;</span></p>
+      <p>Food was cold and the area was not clean.</p>
+      <div class="admin-response"><b>Admin Response:</b> Issues are fixed.</div>
+    </div>
+
+    <div class="feedback" data-status="NEW">
+      <strong>Sneha (0268)</strong>
+      <span class="tags status"><span>NEW</span><span>SUGGESTION</span></span>
+      <p>Lunch - 02-09-2025 <span class="stars">&#9733;&#9733;&#9733;&#9733;</span></p>
+      <p>Good variety. More South Indian options?</p>
+      <div class="buttons">
+        <button class="reviewBtn"><i class="fa-solid fa-check"></i> Mark as Reviewed</button>
+        <button class="replyBtn"><i class="fa-solid fa-reply"></i> Respond</button>
+      </div>
+    </div>
+
+    <div class="feedback" data-status="REVIEWED">
+      <strong>Arjun (0356)</strong>
+      <span class="tags status"><span>REVIEWED</span><span>COMPLAINT</span></span>
+      <p>Breakfast - 01-09-2025 <span class="stars">&#9733;&#9733;</span></p>
+      <p>Bread was stale and tea too sweet.</p>
+      <div class="buttons"><button class="replyBtn"><i class="fa-solid fa-reply"></i> Respond</button></div>
+    </div>
+
+  </div>
+
+
+<script>
+
+async function loadFeedback(){
+
+const res =
+await fetch(
+"/api/feedback_admin"
+);
+
+const data =
+await res.json();
+
+const list =
+document.getElementById(
+"feedbackList"
+);
+
+list.innerHTML="";
+
+
+data.forEach(f=>{
+
+let stars="";
+
+for(let i=0;i<f.rating;i++)
+stars+="★";
+
+const div =
+document.createElement("div");
+
+div.className="feedback";
+
+div.dataset.status=f.status;
+
+div.innerHTML=`
+
+<strong>${f.name}</strong>
+
+<span class="tags status">
+<span>${f.status}</span>
+</span>
+
+<p>
+<span class="stars">${stars}</span>
+</p>
+
+<p>${f.text}</p>
+
+<div class="buttons">
+
+<button onclick="review(${f.id})">
+Mark Reviewed
+</button>
+
+<button onclick="reply(${f.id})">
+Respond
+</button>
+
+</div>
+
+${f.response ?
+`<div class="admin-response">
+Admin Response:
+${f.response}
+</div>`
+:""}
+
+`;
+
+list.appendChild(div);
+
+});
+
+}
+
+
+async function review(id){
+
+await fetch(
+"/api/feedback_admin",
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/json"
+},
+body:
+JSON.stringify({
+id,
+status:"REVIEWED"
+})
+}
+);
+
+loadFeedback();
+
+}
+
+
+async function reply(id){
+
+const r =
+prompt("Enter response");
+
+if(!r) return;
+
+await fetch(
+"/api/feedback_admin",
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/json"
+},
+body:
+JSON.stringify({
+id,
+status:"RESPONDED",
+response:r
+})
+}
+);
+
+loadFeedback();
+
+}
+
+
+loadFeedback();
+
+</script>
+
+</body>
+</html>

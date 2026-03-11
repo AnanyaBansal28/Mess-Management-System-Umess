@@ -1,0 +1,44 @@
+[
+  {
+    "roll": "0259",
+    "name": "Ananya",
+    "breakfast": true,
+    "lunch": true,
+    "dinner": false
+  },
+  {
+    "roll": "0293",
+    "name": "Gurasees",
+    "breakfast": false,
+    "lunch": true,
+    "dinner": false
+  },
+  {
+    "roll": "0321",
+    "name": "Vrinda",
+    "breakfast": true,
+    "lunch": false,
+    "dinner": false
+  },
+  {
+    "roll": "0272",
+    "name": "Ayushi",
+    "breakfast": true,
+    "lunch": true,
+    "dinner": false
+  },
+  {
+    "roll": "0254",
+    "name": "Aliza",
+    "breakfast": false,
+    "lunch": true,
+    "dinner": false
+  },
+  {
+    "roll": "1775",
+    "name": "Ishvika",
+    "breakfast": true,
+    "lunch": false,
+    "dinner": false
+  }
+]

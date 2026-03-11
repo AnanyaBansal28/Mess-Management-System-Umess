@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>UMESS Portal</title>
+
+  <style>
+    body {margin:0;font-family:'Segoe UI',Arial;background:#e9f0ff;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;}
+    .logo {font-size:28px;font-weight:bold;color:#1a1a66;margin-bottom:5px;}
+    .subtitle {color:#555;margin-bottom:20px;}
+    .container {background:#fff;width:380px;padding:30px;border-radius:20px;box-shadow:0 8px 20px rgba(0,0,0,0.1);text-align:center;}
+    h2 {margin-bottom:20px;}
+    .role-switch {display:flex;gap:10px;margin-bottom:20px;justify-content:center;}
+    .role-switch a {flex:1;padding:12px;border:1px solid #ccc;border-radius:12px;text-decoration:none;color:#333;font-weight:500;cursor:pointer;}
+    .role-switch a:hover {background:#4a3aff;color:#fff;}
+    .form-box {display:none;text-align:left;animation:fadeIn 0.3s ease;}
+    .form-box.active {display:block;}
+    .form-box label {font-size:14px;margin:8px 0 4px;display:block;}
+    .form-box input {width:100%;padding:12px;border-radius:10px;border:none;background:#f5f5f5;margin-bottom:12px;font-size:14px;}
+    .btn {width:100%;padding:12px;border-radius:12px;background:#4a3aff;color:#fff;font-weight:600;margin-top:5px;box-shadow:0 4px 12px rgba(74,58,255,0.3);}
+    .support {margin-top:15px;font-size:13px;color:#666;}
+    @keyframes fadeIn {from{opacity:0;} to{opacity:1;}}
+  </style>
+</head>
+
+<body>
+  <div class="logo">
+    <i class="fa-solid fa-utensils" style="font-size:30px;color:blue;margin-bottom:10px;"></i> UMESS
+  </div>
+  <div class="subtitle">Access your mess management portal</div>
+
+  <div class="container">
+    <h2>Welcome Back</h2>
+
+    <div class="role-switch">
+      <a onclick="showForm('admin-login')"><i class="fa-solid fa-shield"></i><br>Admin/Staff</a>
+      <a onclick="showForm('student-login')"><i class="fa-solid fa-graduation-cap"></i><br>Student</a>
+    </div>
+
+    <!-- ADMIN LOGIN -->
+    <div id="admin-login" class="form-box">
+      <form onsubmit="adminLogin(event)">
+        <label>Email</label>
+        <input id="adminLoginEmail" type="email" required>
+
+        <label>Password</label>
+        <input id="adminLoginPass" type="password" required>
+
+        <button class="btn" type="submit">Login</button>
+      </form>
+
+      <p style="text-align:center;margin-top:10px;">New here?
+        <a onclick="showForm('admin-signup')">Sign Up</a>
+      </p>
+    </div>
+
+    <!-- ADMIN SIGNUP -->
+    <div id="admin-signup" class="form-box">
+      <form onsubmit="adminSignup(event)">
+        <label>Full Name</label>
+        <input id="adminName" type="text" required>
+
+        <label>Email</label>
+        <input id="adminEmail" type="email" required>
+
+        <label>Password</label>
+        <input id="adminPass" type="password" required>
+
+        <button class="btn" type="submit">Sign Up</button>
+      </form>
+
+      <p style="text-align:center;margin-top:10px;">Already have an account?
+        <a onclick="showForm('admin-login')">Login</a>
+      </p>
+    </div>
+
+    <!-- STUDENT LOGIN -->
+    <div id="student-login" class="form-box">
+      <form onsubmit="studentLogin(event)">
+        <label>Student ID</label>
+        <input id="stuLoginID" type="text" required>
+
+        <label>Password</label>
+        <input id="stuLoginPass" type="password" required>
+
+        <button class="btn" type="submit">Login</button>
+      </form>
+
+      <p style="text-align:center;margin-top:10px;">New here?
+        <a onclick="showForm('student-signup')">Sign Up</a>
+      </p>
+    </div>
+
+    <!-- STUDENT SIGNUP -->
+    <div id="student-signup" class="form-box">
+      <form onsubmit="studentSignup(event)">
+        <label>Student ID</label>
+        <input id="stuID" type="text" required>
+
+        <label>Password</label>
+        <input id="stuPass" type="password" required>
+
+        <button class="btn" type="submit">Sign Up</button>
+      </form>
+
+      <p style="text-align:center;margin-top:10px;">Already have an account?
+        <a onclick="showForm('student-login')">Login</a>
+      </p>
+    </div>
+
+    <div class="support">Need help? Contact IT Support</div>
+  </div>
+
+<script>
+
+function showForm(id){
+  document.querySelectorAll(".form-box").forEach(box => box.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+
+showForm("admin-login");
+
+
+// ADMIN SIGNUP
+async function adminSignup(e){
+e.preventDefault();
+
+const name=document.getElementById("adminName").value;
+const email=document.getElementById("adminEmail").value;
+const pass=document.getElementById("adminPass").value;
+
+await fetch("/api/users",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+name,email,password:pass,role:"admin"
+})
+});
+
+alert("Admin registered");
+showForm("admin-login");
+}
+
+
+// ADMIN LOGIN
+async function adminLogin(e){
+e.preventDefault();
+
+const email=document.getElementById("adminLoginEmail").value;
+const pass=document.getElementById("adminLoginPass").value;
+
+const res=await fetch("/api/users");
+const users=await res.json();
+
+const admin=users.find(u=>u.email===email && u.password===pass && u.role==="admin");
+
+if(admin){
+window.location.href="/admin_dashboard.html";
+}else{
+alert("Invalid login");
+}
+}
+
+
+// STUDENT SIGNUP
+async function studentSignup(e){
+e.preventDefault();
+
+const id=document.getElementById("stuID").value;
+const pass=document.getElementById("stuPass").value;
+
+await fetch("/api/users",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+studentID:id,password:pass,role:"student"
+})
+});
+
+alert("Student registered");
+showForm("student-login");
+}
+
+
+// STUDENT LOGIN
+async function studentLogin(e){
+e.preventDefault();
+
+const id=document.getElementById("stuLoginID").value;
+const pass=document.getElementById("stuLoginPass").value;
+
+const res=await fetch("/api/users");
+const users=await res.json();
+
+const student=users.find(u=>u.studentID===id && u.password===pass && u.role==="student");
+
+if(student){
+window.location.href="/studentdashboard.html";
+}else{
+alert("Invalid login");
+}
+
+}
+
+</script>
+</body>
+</html>

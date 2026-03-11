@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attendance Tracking</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9fafc;
+      color: #333;
+    }
+
+    /* Navbar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px 6px;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #4c1d95;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .date-box {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #000;
+    }
+    .date-box i {
+      color: #000;
+    }
+    .btn-purple {
+      background: #8b5cf6;
+      color: #fff;
+      padding: 3px 6px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      padding: 20px 30px;
+    }
+    .stat-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .stat-card h3 {
+      margin: 5px 0;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .stat-card p {
+      font-size: 14px;
+      color: #777;
+    }
+    .stat-purple { color: #8b5cf6; }
+    .stat-green { color: #16a34a; }
+    .stat-orange { color: #ea580c; }
+
+    /* Tabs */
+     /* Tabs */
+   .tabs {
+  display: flex;
+  justify-content: space-between; 
+  margin: 20px auto;
+  background: #fff;
+  width: 95%;       
+  max-width: 1400px; 
+  padding: 10px 20px;
+  border-radius: 25px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  gap: 10px;         
+  flex-wrap: nowrap; 
+}
+
+.tabs a {
+  flex: 1;                  
+  text-align: center;        
+  text-decoration: none;
+  color: #111;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;  
+  align-items: center;
+  gap: 6px;
+}
+
+    .report-container {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+    }
+
+    .report-box {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
+      padding: 30px;
+      width: 650px;
+    }
+
+    .report-box h3 {
+      margin-top: 0;
+      color: #000;
+    }
+
+    .report-box p {
+      color: #555;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #f2f2f4;
+      margin-bottom: 30px;
+      font-size: 16px;
+      color: #333;
+      box-sizing: border-box;
+    }
+
+    input[type="date"].input-field {
+      appearance: auto;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: #f2f2f4;
+      padding-right: 12px;
+    }
+
+    input[type="date"].input-field::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      filter: invert(0.5);
+      margin-right: 4px;
+    }
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 12px 20px;
+      width: 100%;
+      background-color: #030114;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .button:hover {
+      background-color: #1e1e2e;
+    }
+
+    select.input-field {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url('data:image/svg+xml;charset=UTF-8,<svg width="12" height="8" viewBox="0 0 12 8" xmlns="http://www.w3.org/2000/svg"><path d="M6 8L0.803847 0.5H11.1962L6 8Z" fill="%23333"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 12px 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <h2><i class="fas fa-user-check"></i> Attendance Tracking</h2>
+    <div class="actions">
+      <a href="#calendar" class="date-box">31-12-2024 <i class="fas fa-calendar-days"></i></a>
+      <a href="#markAttendance" class="btn-purple"><i class="fas fa-check-circle"></i> Mark Attendance</a>
+    </div>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card"><p><i class="fas fa-users"></i> Today's Total</p><h3 class="stat-purple">595</h3></div>
+    <div class="stat-card"><p><i class="fas fa-chart-line"></i> Attendance Rate</p><h3 class="stat-green">40.8%</h3></div>
+    <div class="stat-card"><p><i class="fas fa-utensils"></i> Peak Meal</p><h3 class="stat-orange">Lunch</h3></div>
+    <div class="stat-card"><p><i class="fas fa-user-graduate"></i> Active Students</p><h3 class="stat-purple">486</h3></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <a href="attendencetracking.html" class="active">
+      <i class="fas fa-list"></i> Daily Attendance
+    </a>
+    <a href="analytics.html">
+      <i class="fas fa-chart-pie"></i> Analytics
+    </a>
+    <a href="report.html">
+      <i class="fas fa-file-alt"></i> Reports
+    </a>
+  </div>
+
+  <!-- Report Section -->
+  <div class="report-container">
+    <!-- Daily Attendance Report -->
+    <div class="report-box">
+      <h3>Daily Attendance Report</h3>
+      <p>Generate detailed attendance report for a specific date</p>
+      <input class="input-field" type="date" id="daily-date" />
+      <button class="button">
+        <i class="fas fa-arrow-down"></i> Download Report
+      </button>
+    </div>
+
+    <!-- Monthly Summary -->
+    <div class="report-box">
+      <h3>Monthly Summary</h3>
+      <p>Comprehensive monthly attendance analysis</p>
+      <select class="input-field" id="monthly-summary">
+        <option value="" disabled selected>Select month</option>
+        <option value="2024-01">January 2024</option>
+        <option value="2024-02">February 2024</option>
+        <option value="2024-03">March 2024</option>
+        <option value="2024-04">April 2024</option>
+        <option value="2024-05">May 2024</option>
+        <option value="2024-06">June 2024</option>
+        <option value="2024-07">July 2024</option>
+        <option value="2024-08">August 2024</option>
+        <option value="2024-09">September 2024</option>
+        <option value="2024-10">October 2024</option>
+        <option value="2024-11">November 2024</option>
+        <option value="2024-12">December 2024</option>
+      </select>
+      <button class="button">
+        <i class="fas fa-arrow-down"></i> Download Report
+      </button>
+    </div>
+  </div>
+
+</body>
+</html>

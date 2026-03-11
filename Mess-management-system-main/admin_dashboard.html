@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UMESS Dashboard</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Segoe UI',Arial,sans-serif;
+background:#f7f9fc;
+color:#333;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#fff;
+padding:15px 30px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.logo{
+font-weight:bold;
+font-size:20px;
+color:#1a1a66;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.role-badge{
+background:#e6f0ff;
+color:#0066cc;
+padding:4px 14px;
+border-radius:18px;
+font-size:12px;
+font-weight:600;
+margin-left:10px;
+}
+
+.logout{
+text-decoration:none;
+color:#333;
+font-weight:500;
+}
+
+.dashboard{
+padding:30px 100px;
+}
+
+.subtitle{
+color:#777;
+margin-bottom:30px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+margin-bottom:30px;
+}
+
+.stat-card{
+background:#fff;
+padding:20px;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.05);
+text-align:center;
+}
+
+.icon-circle{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:40px;
+height:40px;
+border-radius:50%;
+background:#e0f0ff;
+color:#006eff;
+font-size:18px;
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+margin-bottom:30px;
+}
+
+.feature-card{
+background:#fff;
+padding:20px;
+border-radius:16px;
+box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.btn{
+display:inline-block;
+padding:10px 18px;
+border-radius:8px;
+text-decoration:none;
+color:#fff;
+font-weight:600;
+}
+
+.btn-orange{background:#ff7a00;}
+.btn-green{background:#28c76f;}
+.btn-blue{background:#006eff;}
+.btn-purple{background:#9c27b0;}
+
+.icon-box{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+width:50px;
+height:50px;
+color:#fff;
+font-size:22px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.activity{
+background:#fff;
+padding:20px;
+border-radius:12px;
+box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+.activity-item{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+font-size:14px;
+}
+
+.activity-item span{
+color:#888;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+<i class="fa-solid fa-utensils"
+style="font-size:25px;color:blue;"></i>
+
+UMESS
+
+<span class="role-badge">
+Administrator
+</span>
+
+</div>
+
+<a href="/index.html" class="logout">
+<i class="fa-solid fa-arrow-right-from-bracket"></i>
+Logout
+</a>
+
+</header>
+
+
+<div class="dashboard">
+
+<h2>Dashboard</h2>
+<p class="subtitle">
+Manage your mess operations efficiently
+</p>
+
+
+<div class="stats" id="stats"></div>
+
+<div class="features" id="features"></div>
+
+
+<div class="activity">
+
+<h4>
+<i class="fa-solid fa-chart-column"
+style="color:blue"></i>
+Recent Activity
+</h4>
+
+<div id="activity-list"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+
+const statsData = [
+
+{ title:"Today's Meals",
+value:"1247",
+icon:"fa-arrow-trend-up" },
+
+{ title:"Revenue",
+value:"₹45230",
+icon:"fa-chart-column" },
+
+{ title:"Active Students",
+value:"486",
+icon:"fa-users" },
+
+{ title:"This Month",
+value:"28 Days",
+icon:"fa-calendar" }
+
+];
+
+
+
+const featuresData = [
+
+{
+color:"#ff7a00",
+icon:"fa-utensils",
+title:"Menu Management",
+desc:"Plan daily meals",
+link:"/menu.html",
+btnClass:"btn-orange"
+},
+
+{
+color:"#28c76f",
+icon:"fa-box-open",
+title:"Inventory Control",
+desc:"Manage stock",
+link:"/inventory.html",
+btnClass:"btn-green"
+},
+
+{
+color:"#006eff",
+icon:"fa-message",
+title:"Feedback System",
+desc:"Check feedback",
+link:"/feedback_admin.html",
+btnClass:"btn-blue"
+},
+
+{
+color:"#9c27b0",
+icon:"fa-users",
+title:"Attendance",
+desc:"Track attendance",
+link:"/attendencetracking.html",
+btnClass:"btn-purple"
+}
+
+];
+
+
+
+const activityData = [
+
+{
+text:"Menu updated",
+time:"2 hours ago"
+},
+
+{
+text:"Stock updated",
+time:"4 hours ago"
+},
+
+{
+text:"Feedback received",
+time:"6 hours ago"
+}
+
+];
+
+
+
+document.getElementById("stats").innerHTML =
+statsData.map(s=>`
+
+<div class="stat-card">
+
+<p>${s.title}</p>
+
+<h3>${s.value}</h3>
+
+<div class="icon-circle">
+<i class="fa-solid ${s.icon}"></i>
+</div>
+
+</div>
+
+`).join("");
+
+
+
+document.getElementById("features").innerHTML =
+featuresData.map(f=>`
+
+<div class="feature-card">
+
+<div class="icon-box"
+style="background:${f.color}">
+
+<i class="fa-solid ${f.icon}"></i>
+
+</div>
+
+<h3>${f.title}</h3>
+
+<p>${f.desc}</p>
+
+<a href="${f.link}"
+class="btn ${f.btnClass}">
+
+Manage
+
+</a>
+
+</div>
+
+`).join("");
+
+
+
+document.getElementById("activity-list").innerHTML =
+activityData.map(a=>`
+
+<div class="activity-item">
+
+<div>${a.text}</div>
+
+<span>${a.time}</span>
+
+</div>
+
+`).join("");
+
+
+</script>
+
+</body>
+</html>

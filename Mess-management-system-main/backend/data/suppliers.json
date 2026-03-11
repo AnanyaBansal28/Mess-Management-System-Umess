@@ -1,0 +1,16 @@
+[
+  {
+    "name": "ABC Grains",
+    "phone": "+91 98765 43210",
+    "email": "contact@abcgrains.com",
+    "rating": "4.5",
+    "items": ["Rice", "Wheat", "Dal"]
+  },
+  {
+    "name": "Fresh Vegetables Co.",
+    "phone": "+91 87654 32109",
+    "email": "orders@freshveggies.com",
+    "rating": "4.2",
+    "items": ["Onions", "Tomatoes", "Potatoes"]
+  }
+]

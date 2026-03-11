@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Vrinda Kapoor",
+    "status": "RESPONDED",
+    "text": "Excellent paneer curry today!",
+    "rating": 5,
+    "response": "thank you"
+  },
+  {
+    "id": 2,
+    "name": "Ananya Bansal",
+    "status": "REVIEWED",
+    "text": "Poha was okay",
+    "rating": 3,
+    "response": ""
+  },
+  {
+    "id": 3,
+    "name": "Gurasees",
+    "status": "RESPONDED",
+    "text": "Food was cold",
+    "rating": 1,
+    "response": "Issue fixed"
+  }
+]

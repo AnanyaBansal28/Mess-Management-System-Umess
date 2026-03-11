@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMess - Student Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 300;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background: #f9fafb;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 16px 50px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
+    }
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo {
+      font-weight: 600;
+      font-size: 20px;
+      color: #333;
+      display: flex;
+      align-items: center;
+    }
+    .logo i {
+      margin-right: 8px;
+      color: #4f46e5;
+    }
+    .student-portal {
+      background: #eef2ff;
+      color: #3b82f6;
+      padding: 4px 14px;
+      border-radius: 18px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .navbar-right {
+      font-size: 14px;
+      color: #374151;
+    }
+    .navbar-right a {
+      margin-left: 16px;
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+    }
+
+    .dashboard {
+      padding: 35px 60px 10px;
+    }
+    .dashboard h1 {
+      font-size: 26px;
+      margin: 0;
+      font-weight: 600;
+    }
+    .dashboard p {
+      color: #6b7280;
+      font-size: 15px;
+      margin-top: 5px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+      background: #fff;
+      width: 950px;
+      padding: 10px 30px;
+      border-radius: 25px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      gap: 200px;
+      flex-wrap: wrap;
+    }
+    .tabs a {
+      text-decoration: none;
+      color: #111;
+      font-weight: 500;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .menu-box {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin: 25px auto;
+      padding: 25px;
+      max-width: 950px;
+    }
+    .menu-header {
+      font-size: 17px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .menu-header i {
+      color: #dc2626;
+    }
+
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 15px;
+      margin: 18px 0;
+      padding: 18px;
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .available {
+      background: #dcfce7;
+      color: #16a34a;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 6px;
+      font-weight: 500;
+    }
+    .price {
+      float: right;
+      font-weight: 500;
+      color: #2563eb;
+      font-size: 15px;
+    }
+    .time {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      color: #6b7280;
+      margin: 10px 0;
+      gap: 6px;
+    }
+    .items span {
+      background: #f3f4f6;
+      padding: 5px 10px;
+      margin: 5px 5px 0 0;
+      border-radius: 10px;
+      font-size: 12px;
+      display: inline-block;
+    }
+    .select-btn {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      padding: 6px 12px;
+      border-radius: 11px;
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .selected {
+      background: #22c55e;
+    }
+    .not-selected {
+      background: #4f46e5;
+    }
+
+    @media (max-width: 1024px) {
+      .tabs {
+        width: 90%;
+        gap: 50px;
+        padding: 10px 20px;
+      }
+      .menu-box {
+        width: 90%;
+      }
+    }
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 20px;
+      }
+      .dashboard {
+        padding: 25px 20px 10px;
+      }
+      .tabs {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 20px;
+        padding: 10px;
+      }
+      .tabs a {
+        font-size: 13px;
+      }
+    }
+    @media (max-width: 480px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .navbar-right {
+        margin-top: 8px;
+      }
+      .dashboard h1 {
+        font-size: 20px;
+      }
+      .tabs {
+        flex-direction: column;
+        width: 95%;
+        text-align: center;
+        gap: 15px;
+      }
+      .tabs a {
+        font-size: 14px;
+        justify-content: center;
+      }
+      .menu-box {
+        padding: 15px;
+        width: 95%;
+      }
+      .card h3 {
+        font-size: 14px;
+      }
+      .price {
+        font-size: 13px;
+      }
+      .time {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="navbar-left">
+      <div class="logo"><i class="fas fa-utensils"></i> UMESS</div>
+      <div class="student-portal">Student Portal</div>
+    </div>
+    <div class="navbar-right">
+      <a href="1st page.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </div>
+
+  <div class="dashboard">
+    <h1>Student Dashboard</h1>
+    <p>Manage your meals, attendance, and feedback</p>
+  </div>
+
+  <div class="tabs">
+    <a href="studentdashboard.html"><i class="fas fa-utensils"></i> Meals</a>
+    <a href="attendence.html"><i class="fa-regular fa-calendar"></i> Attendance</a>
+    <a href="bill.html"><i class="fa-regular fa-file"></i> Bill</a>
+    <a href="feedback.html"><i class="fa-regular fa-message"></i> Feedback</a>
+  </div>
+
+  <div class="menu-box">
+    <div class="menu-header"><i class="fas fa-utensils"></i> Today's Menu</div>
+
+    <div class="card">
+      <h3>Breakfast <span class="available">Available</span></h3>
+      <span class="price">₹ 25</span>
+      <div class="time"><i class="fa-regular fa-clock"></i> 7:00 AM - 10:00 AM</div>
+      <div class="items">
+        <span>Poha</span>
+        <span>Sambar</span>
+        <span>Coconut Chutney</span>
+        <span>Tea/Coffee</span>
+      </div>
+      <div class="select-btn not-selected">Select Breakfast</div>
+    </div>
+
+    <div class="card">
+      <h3>Lunch <span class="available">Available</span></h3>
+      <span class="price">₹ 45</span>
+      <div class="time"><i class="fa-regular fa-clock"></i> 12:00 PM - 3:00 PM</div>
+      <div class="items">
+        <span>Rice</span>
+        <span>Dal</span>
+        <span>Mixed Vegetable</span>
+        <span>Roti</span>
+        <span>Pickle</span>
+      </div>
+      <div class="select-btn not-selected">Select Lunch</div>
+    </div>
+  
+    <div class="card">
+      <h3>Dinner <span class="available">Available</span></h3>
+      <span class="price">₹ 40</span>
+      <div class="time"><i class="fa-regular fa-clock"></i> 7:00 PM - 10:00 PM</div>
+      <div class="items">
+        <span>Jeera rice</span>
+        <span>Paneer Curry</span>
+        <span>Chapati</span>
+        <span>Raita</span>
+      </div>
+      <div class="select-btn not-selected">Select Dinner</div>
+    </div>
+  </div>
+<script>
+const selectButtons = document.querySelectorAll('.select-btn');
+
+selectButtons.forEach(button => {
+  button.addEventListener('click', async () => {
+
+    const mealType = button.parentElement
+      .querySelector('h3')
+      .textContent.split(' ')[0];
+
+    await fetch("/api/meal", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        meal: mealType
+      })
+    });
+
+    selectButtons.forEach(btn => {
+      btn.classList.remove('selected');
+      btn.classList.add('not-selected');
+
+      const type = btn.parentElement
+        .querySelector('h3')
+        .textContent.split(' ')[0];
+
+      btn.textContent = `Select ${type}`;
+    });
+
+    button.classList.remove('not-selected');
+    button.classList.add('selected');
+    button.textContent = "Selected";
+
+  });
+});
+</script>
+
+</body>
+</html>
+
+
+
+

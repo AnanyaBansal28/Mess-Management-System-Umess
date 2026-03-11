@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMess - Feedback</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+      font-weight: 400;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 12px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .logo {
+      font-weight: 600;
+      font-size: 20px;
+      color: #333;
+    }
+    .logo i {
+      margin-right: 8px;
+      color: #4f46e5;
+    }
+    .student-portal {
+      background: #eef2ff;
+      color: #3b82f6;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .navbar-right {
+      font-size: 14px;
+      color: #374151;
+      flex-shrink: 0;
+    }
+    .navbar-right a {
+      margin-left: 16px;
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+    }
+    .dashboard {
+      padding: 35px 60px 10px;
+    }
+    .dashboard h1 {
+      font-size: 26px;
+      margin: 0;
+      font-weight: 600;
+    }
+    .dashboard p {
+      color: #6b7280;
+      font-size: 15px;
+      margin-top: 4px;
+      font-weight: 400;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+      background: #fff;
+      width: 950px;
+      padding: 10px 30px;
+      border-radius: 25px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      gap: 200px;
+      flex-wrap: wrap;
+    }
+    .tabs a {
+      text-decoration: none;
+      color: #111;
+      font-weight: 500;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin: 25px auto;
+      padding: 25px;
+      max-width: 950px;
+    }
+    .card-header {
+      font-size: 17px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-header i {
+      color: #712db1;
+    }
+    .stars {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: left;
+      gap: 5px;
+      margin: 10px 0;
+    }
+    .stars input {
+      display: none;
+    }
+    .stars label {
+      font-size: 30px;
+      color: #d1d5db;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .stars label:hover,
+    .stars label:hover ~ label {
+      color: #facc15;
+    }
+    .stars input:checked ~ label {
+      color: #facc15;
+    }
+    .comment-box {
+      width: 100%;
+      min-height: 80px;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      background: #f3f4f6;
+      font-size: 14px;
+      margin: 15px 0;
+      resize: none;
+      outline: none;
+      font-family: inherit;
+    }
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 10px 12px;
+      background: #8945e8;
+      color: #fff;
+      font-weight: 500;
+      font-size: 15px;
+      text-align: center;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .submit-btn:hover {
+      background: #7834d1;
+    }
+    .feedback-item {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      position: relative;
+    }
+    .feedback-item .stars {
+      font-size: 16px;
+      margin-bottom: 6px;
+      flex-direction: row;
+    }
+    .feedback-item .stars i.active {
+      color: #facc15;
+    }
+    .feedback-item .date {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+    @media (max-width: 1024px) {
+      .tabs {
+        width: 90%;
+        gap: 50px;
+        padding: 10px 20px;
+      }
+      .card {
+        width: 90%;
+        padding: 20px;
+      }
+    }
+    @media (max-width: 768px) {
+      .dashboard {
+        padding: 25px 20px 10px;
+      }
+      .tabs {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 20px;
+        padding: 10px;
+      }
+    }
+    @media (max-width: 480px) {
+      .tabs {
+        flex-direction: column;
+        width: 95%;
+        text-align: center;
+        gap: 15px;
+        padding: 15px;
+      }
+      .tabs a {
+        font-size: 13px;
+        justify-content: center;
+      }
+      .card {
+        padding: 15px;
+        width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-left">
+      <div class="logo"><i class="fas fa-utensils"></i> UMESS</div>
+      <div class="student-portal">Student Portal</div>
+    </div>
+    <div class="navbar-right">
+      <a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </div>
+  <div class="dashboard">
+    <h1>Student Dashboard</h1>
+    <p>Manage your meals, attendance, and feedback</p>
+  </div>
+  <div class="tabs">
+    <a href="studentdashboard.html"><i class="fas fa-utensils"></i> Meals</a>
+    <a href="attendence.html"><i class="fa-regular fa-calendar"></i> Attendance</a>
+    <a href="bill.html"><i class="fa-regular fa-file"></i> Bill</a>
+    <a href="feedback.html"><i class="fa-regular fa-message"></i> Feedback</a>
+  </div>
+  <div class="card">
+    <div class="card-header"><i class="fa-regular fa-message"></i> Share Your Feedback</div>
+    <div>Rate Today’s Meal</div>
+    <div class="stars">
+      <input type="radio" name="rating" id="star5" value="5">
+      <label for="star5">&#9733;</label>
+      <input type="radio" name="rating" id="star4" value="4">
+      <label for="star4">&#9733;</label>
+      <input type="radio" name="rating" id="star3" value="3">
+      <label for="star3">&#9733;</label>
+      <input type="radio" name="rating" id="star2" value="2">
+      <label for="star2">&#9733;</label>
+      <input type="radio" name="rating" id="star1" value="1">
+      <label for="star1">&#9733;</label>
+    </div>
+    <div>Your Comments</div>
+    <textarea class="comment-box" id="comment" placeholder="Share your thoughts about the food, service, or suggestions for improvement..."></textarea>
+    <button class="submit-btn" id="submitBtn">Submit Feedback</button>
+  </div>
+  <div class="card">
+    <div class="card-header">Your Recent Feedback</div>
+    <div id="feedbackList">
+      <div class="feedback-item">
+        <div class="stars">
+          <i class="fas fa-star active"></i>
+          <i class="fas fa-star active"></i>
+          <i class="fas fa-star active"></i>
+          <i class="fas fa-star active"></i>
+          <i class="fas fa-star active"></i>
+        </div>
+        Excellent dinner today! The paneer curry was delicious and well-prepared.
+        <div class="date">Dec 26, 2024</div>
+      </div>
+      <div class="feedback-item">
+        <div class="stars">
+          <i class="fas fa-star active"></i>
+          <i class="fas fa-star active"></i>
+          <i class="fas fa-star active"></i>
+          <i class="fas fa-star active"></i>
+          <i class="fas fa-star"></i>
+        </div>
+        Good lunch but could use more variety in vegetables. Overall satisfied.
+        <div class="date">Dec 25, 2024</div>
+      </div>
+    </div>
+  </div>
+  <script>
+
+const submitBtn = document.getElementById('submitBtn');
+const commentBox = document.getElementById('comment');
+const feedbackList = document.getElementById('feedbackList');
+
+async function loadFeedback(){
+
+const res = await fetch("/api/feedback");
+const data = await res.json();
+
+feedbackList.innerHTML = "";
+
+data.forEach(f => {
+
+const div = document.createElement("div");
+div.className = "feedback-item";
+
+div.innerHTML = `
+<div>${"⭐".repeat(f.rating)}</div>
+${f.comment}
+<div class="date">${f.date}</div>
+`;
+
+feedbackList.appendChild(div);
+
+});
+
+}
+
+submitBtn.addEventListener('click', async () => {
+
+const rating =
+document.querySelector('input[name="rating"]:checked');
+
+const comment = commentBox.value;
+
+if(!rating || comment === "") return;
+
+await fetch("/api/feedback", {
+method: "POST",
+headers: {
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+rating: rating.value,
+comment: comment
+})
+});
+
+commentBox.value = "";
+
+loadFeedback();
+
+});
+
+loadFeedback();
+
+</script>
+</body>
+</html>
+

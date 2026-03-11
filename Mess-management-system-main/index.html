@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>UMESS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+      background: #eef3ff;
+      color: #333;
+      text-align: center;
+    }
+    *{
+      font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 50px;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 20px;
+      color: #1a1a66;
+    }
+     .login-btn {
+    background: #3728cc;
+    color: white;
+    padding: 6px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  .login-btn a {
+    color: white;   
+    text-decoration: none;  
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+  }
+
+  .login-btn:hover {
+    background: #2a1fb0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(58, 42, 200, 0.3);
+  }
+    .hero {
+      padding: 50px 20px;
+    }
+    .hero h1 {
+      font-size: 28px;
+    }
+    .hero span {
+      color: #4a3aff;
+    }
+    .hero p {
+      max-width: 600px;
+      margin: 10px auto 20px;
+      font-size: 14px;
+    }
+    .buttons {
+      margin: 20px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      margin: 5px;
+      font-size: 14px;
+      text-decoration: none; 
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .btn-primary {
+      background: #4a3aff;
+      color: white;
+    }
+    .btn-primary:hover {
+      background: #3728cc;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(58, 42, 200, 0.3);
+    }
+    .btn-secondary {
+      background: white;
+      color: #4a3aff;
+      border: 1px solid #ccc;
+    }
+    .btn-secondary:hover {
+      background: #f0f0ff;
+      color: #3728cc;
+      border-color: #3728cc;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(58, 42, 200, 0.3);
+    }
+
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin: 1px 0;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    .stats {
+      margin: 80px 0;
+    }
+    .stats h2 {
+      margin-bottom: 20px;
+    }
+    .stat-box {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      font-size: 20px;
+      font-weight: bold;
+      color: #4a3aff;
+    }
+    .stat small {
+      display: block;
+      font-weight: normal;
+      color: #333;
+      margin-top: 5px;
+    }
+
+    footer {
+      background: #111a2b;
+      color: white;
+      padding: 20px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+      }
+      .hero h1 {
+        font-size: 22px;
+      }
+      .hero p {
+        font-size: 13px;
+      }
+      .stat-box {
+        gap: 20px;
+      }
+    }
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .hero {
+        padding: 30px 15px;
+      }
+      .hero h1 {
+        font-size: 20px;
+      }
+      .hero p {
+        font-size: 12px;
+      }
+      .stat-box {
+        flex-direction: column;
+        gap: 15px;
+      }
+      .card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo"><i class="fa-solid fa-utensils"style="font-size:30px; color:blue; margin-bottom:0px;"></i> UMESS</div>
+    <button class="login-btn">
+        <a href="login.html">Login</a>
+    </button>
+  </header>
+
+  <section class="hero">
+    <h1 style="font-size: 240%;margin-bottom: 5px;">Welcome to <span>UMESS</span></h1>
+    <p style="font-size: 100%;">Your comprehensive university mess management solution. Streamline meal planning, track attendance, manage inventory, and enhance the dining experience for everyone.</p>
+    <div class="buttons">
+        <a href="/login.html" class="btn btn-primary">Get Started</a>
+        <a href="/login.html" class="btn btn-secondary">Learn More</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="card">
+      <i class="fa-solid fa-utensils"style="font-size:30px; color:blue; margin-bottom:10px;"></i>
+      <h3>Smart Meal Planning</h3>
+      <p>Efficiently plan and manage daily meals with automated scheduling and nutritional tracking.</p>
+    </div>
+    <div class="card">
+      <i class="fa-solid fa-shield-halved"style="font-size:30px; color:green; margin-bottom:10px;"></i>
+      <h3>Inventory Control</h3>
+      <p>Track ingredients, manage stock levels, and automate reordering to minimize waste.</p>
+    </div>
+    <div class="card">
+      <i class="fa-solid fa-users"style="font-size:30px; color:purple; margin-bottom:10px;"></i>
+      <h3>User Management</h3>
+      <p>Seamlessly manage student and staff accounts with role-based access control.</p>
+    </div>
+  </section>
+
+  <section class="stats">
+    <h2>Trusted by Universities</h2>
+    <div class="stat-box">
+      <div class="stat">500+ <small>Students Served</small></div>
+      <div class="stat">50+ <small>Staff Members</small></div>
+      <div class="stat">1000+ <small>Meals Daily</small></div>
+      <div class="stat">99% <small>Satisfaction</small></div>
+    </div>
+  </section>
+
+  <footer>
+    <i class="fa-solid fa-utensils"></i> UMESS <br>
+    © 2025 UMESS. All rights reserved.
+  </footer>
+
+</body>
+</html>
+

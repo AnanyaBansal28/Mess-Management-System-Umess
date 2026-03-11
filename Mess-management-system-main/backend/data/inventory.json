@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Basmati Rice",
+    "category": "Grains",
+    "stock": 450,
+    "price": 85
+  },
+  {
+    "name": "Onions",
+    "category": "Vegetables",
+    "stock": 67,
+    "price": 30
+  },
+  {
+    "name": "Milk",
+    "category": "Dairy",
+    "stock": 80,
+    "price": 55
+  },
+  {
+    "name": "Turmeric Powder",
+    "category": "Spices",
+    "stock": 5,
+    "price": 180
+  }
+]
