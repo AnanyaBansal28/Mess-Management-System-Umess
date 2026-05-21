@@ -57,7 +57,7 @@ maxAge:1000 * 60 * 60
 
 
 
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname)));
 
 
 
