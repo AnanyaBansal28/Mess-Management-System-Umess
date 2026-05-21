@@ -5,9 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UMESS Portal</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+
 body{
 margin:0;
 font-family:'Segoe UI',sans-serif;
@@ -74,10 +76,6 @@ align-items:center;
 font-size:14px;
 gap:8px;
 transition:0.3s;
-}
-
-.role-btn i{
-font-size:14px;
 }
 
 .role-btn.active{
@@ -164,161 +162,338 @@ color:#777;
 text-align:center;
 }
 
-.support i{
-margin-right:6px;
-font-size:13px;
-}
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
 <div class="logo">
-<i class="fa-solid fa-utensils"></i> UMESS
+<i class="fa-solid fa-utensils"></i>
+UMESS
 </div>
-<div class="subtitle">Access your mess management portal</div>
 
-<h2 id="mainTitle">Welcome Back</h2>
+<div class="subtitle">
+Access your mess management portal
+</div>
+
+<h2 id="mainTitle">
+Welcome Back
+</h2>
 
 <div class="role-switch">
-<button class="role-btn active" id="adminBtn" onclick="setRole('admin')">
+
+<button class="role-btn active"
+id="adminBtn"
+onclick="setRole('admin')">
+
 <i class="fa-solid fa-shield-halved"></i>
 <span>Admin/Staff</span>
+
 </button>
 
-<button class="role-btn" id="studentBtn" onclick="setRole('student')">
+<button class="role-btn"
+id="studentBtn"
+onclick="setRole('student')">
+
 <i class="fa-solid fa-graduation-cap"></i>
 <span>Student</span>
+
 </button>
+
 </div>
 
 <div class="tab-switch">
-<button class="tab-btn active" id="loginTab" onclick="setTab('login')">Login</button>
-<button class="tab-btn" id="signupTab" onclick="setTab('signup')">Sign Up</button>
+
+<button class="tab-btn active"
+id="loginTab"
+onclick="setTab('login')">
+
+Login
+
+</button>
+
+<button class="tab-btn"
+id="signupTab"
+onclick="setTab('signup')">
+
+Sign Up
+
+</button>
+
 </div>
 
 <!-- LOGIN -->
-<div id="loginForm" class="form-box active">
+
+<div id="loginForm"
+class="form-box active">
+
+<!-- ADMIN LOGIN -->
 
 <div id="adminLoginFields">
+
 <label>Email</label>
-<input id="adminEmail" type="email" placeholder="Enter email">
+
+<input
+id="adminEmail"
+type="email"
+placeholder="Enter email">
 
 <label>Password</label>
-<input id="adminPass" type="password" placeholder="Enter password">
+
+<input
+id="adminPass"
+type="password"
+placeholder="Enter password">
+
 </div>
 
-<div id="studentLoginFields" style="display:none;">
+<!-- STUDENT LOGIN -->
+
+<div id="studentLoginFields"
+style="display:none;">
+
 <label>Student ID</label>
-<input id="stuID" type="text" placeholder="Enter student ID">
+
+<input
+id="stuID"
+type="text"
+placeholder="Enter student ID">
 
 <label>Password</label>
-<input id="stuPass" type="password" placeholder="Enter password">
+
+<input
+id="stuPass"
+type="password"
+placeholder="Enter password">
+
 </div>
 
-<button class="btn" onclick="loginUser()">Login</button>
+<button class="btn"
+onclick="loginUser()">
+
+Login
+
+</button>
 
 </div>
 
 <!-- SIGNUP -->
-<div id="signupForm" class="form-box">
+
+<div id="signupForm"
+class="form-box">
+
+<!-- ADMIN SIGNUP -->
 
 <div id="adminSignupFields">
+
 <label>Full Name</label>
-<input id="adminName" type="text" placeholder="Enter full name">
+
+<input
+id="adminName"
+type="text"
+placeholder="Enter full name">
 
 <label>Email</label>
-<input id="adminSignupEmail" type="email" placeholder="Enter email">
+
+<input
+id="adminSignupEmail"
+type="email"
+placeholder="Enter email">
 
 <label>Password</label>
-<input id="adminSignupPass" type="password" placeholder="Create password">
+
+<input
+id="adminSignupPass"
+type="password"
+placeholder="Create password">
 
 <label>Confirm Password</label>
-<input id="adminConfirmPass" type="password" placeholder="Confirm password">
+
+<input
+id="adminConfirmPass"
+type="password"
+placeholder="Confirm password">
+
 </div>
 
-<div id="studentSignupFields" style="display:none;">
+<!-- STUDENT SIGNUP -->
+
+<div id="studentSignupFields"
+style="display:none;">
+
 <label>Student ID</label>
-<input id="studentSignupID" type="text" placeholder="Enter student ID">
+
+<input
+id="studentSignupID"
+type="text"
+placeholder="Enter student ID">
 
 <label>Password</label>
-<input id="studentSignupPass" type="password" placeholder="Create password">
+
+<input
+id="studentSignupPass"
+type="password"
+placeholder="Create password">
 
 <label>Confirm Password</label>
-<input id="studentConfirmPass" type="password" placeholder="Confirm password">
+
+<input
+id="studentConfirmPass"
+type="password"
+placeholder="Confirm password">
+
 </div>
 
-<button class="btn" onclick="signupUser()">Create Account</button>
+<button class="btn"
+onclick="signupUser()">
+
+Create Account
+
+</button>
 
 </div>
 
 <div class="support">
+
 <i class="fa-solid fa-headset"></i>
+
 Need help? Contact IT Support
+
 </div>
 
 </div>
 
 <script>
 
-let currentRole="admin";
-let currentTab="login";
+let currentRole = "admin";
+let currentTab = "login";
 
 function setRole(role){
-currentRole=role;
 
-document.getElementById("adminBtn").classList.remove("active");
-document.getElementById("studentBtn").classList.remove("active");
+currentRole = role;
 
-if(role==="admin"){
-document.getElementById("adminBtn").classList.add("active");
+document
+.getElementById("adminBtn")
+.classList.remove("active");
+
+document
+.getElementById("studentBtn")
+.classList.remove("active");
+
+if(role === "admin"){
+
+document
+.getElementById("adminBtn")
+.classList.add("active");
+
 }else{
-document.getElementById("studentBtn").classList.add("active");
+
+document
+.getElementById("studentBtn")
+.classList.add("active");
+
 }
 
 updateForms();
+
 }
 
 function setTab(tab){
-currentTab=tab;
 
-document.getElementById("loginTab").classList.remove("active");
-document.getElementById("signupTab").classList.remove("active");
+currentTab = tab;
 
-if(tab==="login"){
-document.getElementById("loginTab").classList.add("active");
-document.getElementById("mainTitle").innerText="Welcome Back";
+document
+.getElementById("loginTab")
+.classList.remove("active");
+
+document
+.getElementById("signupTab")
+.classList.remove("active");
+
+if(tab === "login"){
+
+document
+.getElementById("loginTab")
+.classList.add("active");
+
+document
+.getElementById("mainTitle")
+.innerText = "Welcome Back";
+
 }else{
-document.getElementById("signupTab").classList.add("active");
-document.getElementById("mainTitle").innerText="Create Account";
+
+document
+.getElementById("signupTab")
+.classList.add("active");
+
+document
+.getElementById("mainTitle")
+.innerText = "Create Account";
+
 }
 
 updateForms();
+
 }
 
 function updateForms(){
 
-document.getElementById("loginForm").classList.remove("active");
-document.getElementById("signupForm").classList.remove("active");
+document
+.getElementById("loginForm")
+.classList.remove("active");
 
-if(currentTab==="login"){
-document.getElementById("loginForm").classList.add("active");
+document
+.getElementById("signupForm")
+.classList.remove("active");
+
+if(currentTab === "login"){
+
+document
+.getElementById("loginForm")
+.classList.add("active");
+
 }else{
-document.getElementById("signupForm").classList.add("active");
+
+document
+.getElementById("signupForm")
+.classList.add("active");
+
 }
 
-document.getElementById("adminLoginFields").style.display=
-(currentRole==="admin" && currentTab==="login")?"block":"none";
+document
+.getElementById("adminLoginFields")
+.style.display =
 
-document.getElementById("studentLoginFields").style.display=
-(currentRole==="student" && currentTab==="login")?"block":"none";
+(currentRole==="admin" &&
+currentTab==="login")
+? "block" : "none";
 
-document.getElementById("adminSignupFields").style.display=
-(currentRole==="admin" && currentTab==="signup")?"block":"none";
+document
+.getElementById("studentLoginFields")
+.style.display =
 
-document.getElementById("studentSignupFields").style.display=
-(currentRole==="student" && currentTab==="signup")?"block":"none";
+(currentRole==="student" &&
+currentTab==="login")
+? "block" : "none";
+
+document
+.getElementById("adminSignupFields")
+.style.display =
+
+(currentRole==="admin" &&
+currentTab==="signup")
+? "block" : "none";
+
+document
+.getElementById("studentSignupFields")
+.style.display =
+
+(currentRole==="student" &&
+currentTab==="signup")
+? "block" : "none";
+
 }
 
 async function loginUser(){
@@ -333,7 +508,8 @@ document.getElementById("adminEmail").value;
 const password =
 document.getElementById("adminPass").value;
 
-const res = await fetch("/api/auth/admin-login",{
+const res =
+await fetch("/api/auth/admin-login",{
 
 method:"POST",
 
@@ -350,14 +526,22 @@ password
 
 const data = await res.json();
 
-if(data.message!=="success"){
-alert("Invalid login");
+console.log(data);
+
+if(data.message !== "success"){
+
+alert(data.message || "Invalid login");
 return;
+
 }
 
-localStorage.setItem("token",data.token);
+localStorage.setItem(
+"token",
+data.token
+);
 
-window.location.href="/admin_dashboard.html";
+window.location.href =
+"/admin_dashboard.html";
 
 }else{
 
@@ -367,7 +551,8 @@ document.getElementById("stuID").value;
 const password =
 document.getElementById("stuPass").value;
 
-const res = await fetch("/api/auth/student-login",{
+const res =
+await fetch("/api/auth/student-login",{
 
 method:"POST",
 
@@ -384,18 +569,28 @@ password
 
 const data = await res.json();
 
-if(data.message!=="success"){
-alert("Invalid login");
+console.log(data);
+
+if(data.message !== "success"){
+
+alert(data.message || "Invalid login");
 return;
+
 }
 
-localStorage.setItem("token",data.token);
+localStorage.setItem(
+"token",
+data.token
+);
 
-window.location.href="/studentdashboard.html";
+window.location.href =
+"/studentdashboard.html";
 
 }
 
 }catch(err){
+
+console.log(err);
 
 alert("Server error");
 
@@ -421,12 +616,15 @@ document.getElementById("adminSignupPass").value;
 const confirm =
 document.getElementById("adminConfirmPass").value;
 
-if(password!==confirm){
+if(password !== confirm){
+
 alert("Passwords do not match");
 return;
+
 }
 
-const res = await fetch("/api/auth/admin-signup",{
+const res =
+await fetch("/api/auth/admin-signup",{
 
 method:"POST",
 
@@ -444,7 +642,9 @@ password
 
 const data = await res.json();
 
-alert(data.message);
+console.log(data);
+
+alert(data.message || "Signup successful");
 
 }else{
 
@@ -457,12 +657,15 @@ document.getElementById("studentSignupPass").value;
 const confirm =
 document.getElementById("studentConfirmPass").value;
 
-if(password!==confirm){
+if(password !== confirm){
+
 alert("Passwords do not match");
 return;
+
 }
 
-const res = await fetch("/api/auth/student-signup",{
+const res =
+await fetch("/api/auth/student-signup",{
 
 method:"POST",
 
@@ -479,13 +682,17 @@ password
 
 const data = await res.json();
 
-alert(data.message);
+console.log(data);
+
+alert(data.message || "Signup successful");
 
 }
 
 setTab("login");
 
 }catch(err){
+
+console.log(err);
 
 alert("Server error");
 
