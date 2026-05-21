@@ -323,105 +323,174 @@ document.getElementById("studentSignupFields").style.display=
 
 async function loginUser(){
 
-const res=await fetch("/api/users");
-const users=await res.json();
+try{
 
 if(currentRole==="admin"){
 
-const email=document.getElementById("adminEmail").value;
-const pass=document.getElementById("adminPass").value;
+const email =
+document.getElementById("adminEmail").value;
 
-const user=users.find(
-u=>u.email===email &&
-u.password===pass &&
-u.role==="admin"
-);
+const password =
+document.getElementById("adminPass").value;
 
-if(!user){
+const res = await fetch("/api/auth/admin-login",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+email,
+password
+})
+
+});
+
+const data = await res.json();
+
+if(data.message!=="success"){
 alert("Invalid login");
 return;
 }
 
-localStorage.setItem("token","admin123");
+localStorage.setItem("token",data.token);
+
 window.location.href="/admin_dashboard.html";
 
 }else{
 
-const id=document.getElementById("stuID").value;
-const pass=document.getElementById("stuPass").value;
+const studentID =
+document.getElementById("stuID").value;
 
-const user=users.find(
-u=>u.studentID===id &&
-u.password===pass &&
-u.role==="student"
-);
+const password =
+document.getElementById("stuPass").value;
 
-if(!user){
+const res = await fetch("/api/auth/student-login",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+studentID,
+password
+})
+
+});
+
+const data = await res.json();
+
+if(data.message!=="success"){
 alert("Invalid login");
 return;
 }
 
-localStorage.setItem("token","student123");
+localStorage.setItem("token",data.token);
+
 window.location.href="/studentdashboard.html";
+
 }
+
+}catch(err){
+
+alert("Server error");
+
+}
+
 }
 
 async function signupUser(){
 
+try{
+
 if(currentRole==="admin"){
 
-const name=document.getElementById("adminName").value;
-const email=document.getElementById("adminSignupEmail").value;
-const password=document.getElementById("adminSignupPass").value;
-const confirm=document.getElementById("adminConfirmPass").value;
+const name =
+document.getElementById("adminName").value;
+
+const email =
+document.getElementById("adminSignupEmail").value;
+
+const password =
+document.getElementById("adminSignupPass").value;
+
+const confirm =
+document.getElementById("adminConfirmPass").value;
 
 if(password!==confirm){
 alert("Passwords do not match");
 return;
 }
 
-await fetch("/api/users",{
+const res = await fetch("/api/auth/admin-signup",{
+
 method:"POST",
+
 headers:{
 "Content-Type":"application/json"
 },
+
 body:JSON.stringify({
 name,
 email,
-password,
-role:"admin"
+password
 })
+
 });
 
-alert("Admin account created");
+const data = await res.json();
+
+alert(data.message);
 
 }else{
 
-const studentID=document.getElementById("studentSignupID").value;
-const password=document.getElementById("studentSignupPass").value;
-const confirm=document.getElementById("studentConfirmPass").value;
+const studentID =
+document.getElementById("studentSignupID").value;
+
+const password =
+document.getElementById("studentSignupPass").value;
+
+const confirm =
+document.getElementById("studentConfirmPass").value;
 
 if(password!==confirm){
 alert("Passwords do not match");
 return;
 }
 
-await fetch("/api/users",{
+const res = await fetch("/api/auth/student-signup",{
+
 method:"POST",
+
 headers:{
 "Content-Type":"application/json"
 },
+
 body:JSON.stringify({
 studentID,
-password,
-role:"student"
+password
 })
+
 });
 
-alert("Student account created");
+const data = await res.json();
+
+alert(data.message);
+
 }
 
 setTab("login");
+
+}catch(err){
+
+alert("Server error");
+
+}
+
 }
 
 updateForms();
