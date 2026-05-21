@@ -571,7 +571,7 @@ const data = await res.json();
 
 console.log(data);
 
-if(data.message !== "success"){
+if(!data.success){
 
 alert(data.message || "Invalid login");
 return;
