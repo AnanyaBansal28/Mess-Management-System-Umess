@@ -300,112 +300,221 @@
       </div>
     </div>
   </div>
-  <script>
-const socket = io();
+<script>
+
 const token = localStorage.getItem("token");
 
 const submitBtn = document.getElementById('submitBtn');
+
 const commentBox = document.getElementById('comment');
+
 const feedbackList = document.getElementById('feedbackList');
 
-// 🔐 Logout
+
+
+// 🔐 LOGOUT
+
 function logout(){
+
   localStorage.removeItem("token");
+
   window.location.href = "/login.html";
+
 }
 
-// 📥 Load feedback
+
+
+// 📥 LOAD FEEDBACK
+
 async function loadFeedback(){
 
 try{
 
 feedbackList.innerHTML = "<p>Loading...</p>";
 
+
+
 const res = await fetch("/api/feedback", {
-  headers: {
-    "Authorization": token
-  }
+
+headers:{
+
+"Authorization": token
+
+}
+
 });
 
-if(!res.ok) throw new Error("Failed to load");
+
+
+if(!res.ok)
+
+throw new Error("Failed to load");
+
+
 
 const data = await res.json();
 
+
+
 feedbackList.innerHTML = "";
+
+
 
 data.forEach(f => {
 
 const div = document.createElement("div");
+
 div.className = "feedback-item";
 
+
+
 div.innerHTML = `
+
 <div>${"⭐".repeat(f.rating)}</div>
+
 ${f.comment}
+
 <div class="date">${f.date}</div>
+
 `;
+
+
 
 feedbackList.appendChild(div);
 
 });
 
+
+
 }catch(err){
+
 feedbackList.innerHTML = "<p>Error loading feedback</p>";
-}
 
 }
 
-// 📤 Submit feedback
+}
+
+
+
+// 📤 SUBMIT FEEDBACK
+
 submitBtn.addEventListener('click', async () => {
 
-const rating =
-document.querySelector('input[name="rating"]:checked');
 
-const comment = commentBox.value.trim();
+
+const rating =
+
+document.querySelector(
+
+'input[name="rating"]:checked'
+
+);
+
+
+
+const comment =
+
+commentBox.value.trim();
+
+
 
 if(!rating || comment === ""){
-  alert("Please fill all fields");
-  return;
+
+alert("Please fill all fields");
+
+return;
+
 }
+
+
 
 try{
 
+
+
 submitBtn.innerText = "Submitting...";
+
 submitBtn.disabled = true;
 
-const res = await fetch("/api/feedback", {
-method: "POST",
-headers: {
-"Content-Type": "application/json",
-"Authorization": token
-},
-body: JSON.stringify({
-rating: rating.value,
-comment: comment
-})
-});
 
-if(!res.ok) throw new Error("Failed to submit");
+
+const res = await fetch(
+
+"/api/feedback",
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json",
+
+"Authorization": token
+
+},
+
+body:JSON.stringify({
+
+rating: rating.value,
+
+comment: comment
+
+})
+
+}
+
+);
+
+
+
+if(!res.ok)
+
+throw new Error("Failed");
+
+
 
 commentBox.value = "";
-document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
+
+
+
+document.querySelectorAll(
+
+'input[name="rating"]'
+
+).forEach(r => r.checked = false);
+
+
 
 alert("Feedback submitted");
 
+
+
 loadFeedback();
 
+
+
 }catch(err){
+
 alert("Error submitting feedback");
+
 }
 
+
+
 submitBtn.innerText = "Submit Feedback";
+
 submitBtn.disabled = false;
 
 });
 
+
+
+// INITIAL LOAD
+
 loadFeedback();
 
 </script>
-<script src="/socket.io/socket.io.js"></script>
 </body>
 </html>
 

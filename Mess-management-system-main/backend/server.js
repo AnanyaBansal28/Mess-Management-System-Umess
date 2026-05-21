@@ -22,6 +22,10 @@ const suppliersRoute = require("./routes/suppliers");
 
 const app = express();
 
+
+
+// EJS TEMPLATE ENGINE
+
 app.set(
 "view engine",
 "ejs"
@@ -31,6 +35,10 @@ app.set(
 "views",
 path.join(__dirname,"views")
 );
+
+
+
+// MIDDLEWARES
 
 app.use(express.json());
 
@@ -57,9 +65,16 @@ maxAge:1000 * 60 * 60
 
 
 
-app.use(express.static(path.join(__dirname)));
+// STATIC FILES
+
+app.use(
+express.static(
+path.join(__dirname,"../frontend")
+)
+);
 
 
+// ROUTES
 
 app.use("/api/users", usersRoute);
 
@@ -87,6 +102,7 @@ app.use("/api/suppliers", suppliersRoute);
 
 
 
+// TEST ROUTE
 
 app.get("/api/test",(req,res)=>{
 
@@ -97,6 +113,8 @@ message:"Server working"
 });
 
 
+
+// EJS SSR PAGE
 
 app.get("/",(req,res)=>{
 
@@ -115,21 +133,27 @@ time:new Date().toLocaleString()
 
 
 
+// DATABASE CONNECTION
 
 connectDB();
 
 
 
+// HTTP SERVER
 
 const server =
 http.createServer(app);
 
 
 
+// SOCKET.IO
+
 const io =
 new Server(server);
 
 
+
+// SOCKET CONNECTION
 
 io.on("connection",(socket)=>{
 
@@ -176,8 +200,13 @@ console.log("User disconnected");
 
 
 
+// MAKE IO GLOBAL
+
 app.set("io", io);
 
+
+
+// START SERVER
 
 server.listen(3000,()=>{
 
