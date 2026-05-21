@@ -4,5 +4,20 @@
     "email": "ananya0259.becse24@chitkara.edu.in",
     "password": "12345",
     "role": "admin"
+  },
+  {
+    "first_name": "Ananya",
+    "last_name": "Bansal",
+    "email": "ananya@gmail.com"
+  },
+  {
+    "studentID": "0259",
+    "password": "12345",
+    "role": "student"
+  },
+  {
+    "studentID": "0259",
+    "password": "12345",
+    "role": "student"
   }
 ]

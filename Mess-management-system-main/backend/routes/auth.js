@@ -1,155 +1,269 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
+
+const bcrypt = require("bcryptjs");
+
+const jwt = require("jsonwebtoken");
+
+const User = require("../models/User");
 
 const router = express.Router();
 
-const usersFile = path.join(__dirname, "../data/users.json");
-const logsFile = path.join(__dirname, "../data/authLogs.json");
 
 
-function readUsers(){
-return JSON.parse(fs.readFileSync(usersFile));
-}
+// ADMIN SIGNUP
 
-function saveUsers(data){
-fs.writeFileSync(usersFile, JSON.stringify(data, null, 2));
-}
+router.post("/admin-signup", async (req, res) => {
 
-function readLogs(){
-return JSON.parse(fs.readFileSync(logsFile));
-}
+  try {
 
-function saveLogs(data){
-fs.writeFileSync(logsFile, JSON.stringify(data, null, 2));
-}
+    const { name, email, password } = req.body;
 
+    // CHECK EXISTING USER
+    const existingUser = await User.findOne({ email });
 
+    if (existingUser) {
 
-router.post("/admin-signup", (req,res)=>{
+      return res.json({
+        message: "User already exists"
+      });
 
-const {name,email,password} = req.body;
+    }
 
-let users = readUsers();
+    // HASH PASSWORD
+    const salt = await bcrypt.genSalt(10);
 
-users.push({
-name,
-email,
-password,
-role:"admin"
-});
+    const hashedPassword =
+      await bcrypt.hash(password, salt);
 
-saveUsers(users);
+    // SAVE USER
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      role: "admin"
+    });
 
-let logs = readLogs();
+    await newUser.save();
 
-logs.push({
-email:email,
-action:"admin signup",
-time:new Date().toLocaleString()
-});
+    res.json({
+      message: "Admin registered successfully"
+    });
 
-saveLogs(logs);
+  } catch (err) {
 
-res.json({message:"Admin registered"});
+    res.status(500).json({
+      error: err.message
+    });
 
-});
-
-
-
-router.post("/admin-login", (req,res)=>{
-
-const {email,password} = req.body;
-
-let users = readUsers();
-
-const admin = users.find(
-u => u.email===email && u.password===password && u.role==="admin"
-);
-
-if(admin){
-
-let logs = readLogs();
-
-logs.push({
-email:email,
-action:"admin login",
-time:new Date().toLocaleString()
-});
-
-saveLogs(logs);
-
-res.json({message:"success"});
-
-}else{
-
-res.json({message:"Invalid credentials"});
-
-}
+  }
 
 });
 
 
 
-router.post("/student-signup",(req,res)=>{
+// ADMIN LOGIN
 
-const {studentID,password} = req.body;
+router.post("/admin-login", async (req, res) => {
 
-let users = readUsers();
+  try {
 
-users.push({
-studentID,
-password,
-role:"student"
+    const { email, password } = req.body;
+
+    // FIND ADMIN
+    const admin =
+      await User.findOne({
+        email,
+        role: "admin"
+      });
+
+    if (!admin) {
+
+      return res.json({
+        message: "Invalid credentials"
+      });
+
+    }
+
+    // COMPARE PASSWORD
+    const isMatch =
+      await bcrypt.compare(
+        password,
+        admin.password
+      );
+
+    if (!isMatch) {
+
+      return res.json({
+        message: "Invalid credentials"
+      });
+
+    }
+
+    // JWT TOKEN
+    const token = jwt.sign(
+
+      {
+        id: admin._id,
+        role: admin.role
+      },
+
+      "jwtSecretKey",
+
+      {
+        expiresIn: "1h"
+      }
+
+    );
+
+    // SAVE COOKIE
+    res.cookie("token", token);
+
+    // SAVE SESSION
+    req.session.user = {
+      id: admin._id,
+      role: admin.role
+    };
+
+    res.json({
+      message: "success",
+      token
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
 });
 
-saveUsers(users);
 
-let logs = readLogs();
 
-logs.push({
-studentID:studentID,
-action:"student signup",
-time:new Date().toLocaleString()
+// STUDENT SIGNUP
+
+router.post("/student-signup", async (req, res) => {
+
+  try {
+
+    const { studentID, password } = req.body;
+
+    const existingStudent =
+      await User.findOne({ studentID });
+
+    if (existingStudent) {
+
+      return res.json({
+        message: "Student already exists"
+      });
+
+    }
+
+    const salt =
+      await bcrypt.genSalt(10);
+
+    const hashedPassword =
+      await bcrypt.hash(password, salt);
+
+    const newStudent = new User({
+
+      studentID,
+
+      password: hashedPassword,
+
+      role: "student"
+
+    });
+
+    await newStudent.save();
+
+    res.json({
+      message: "Student registered successfully"
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
 });
 
-saveLogs(logs);
-
-res.json({message:"Student registered"});
-
-});
 
 
+// STUDENT LOGIN
 
-router.post("/student-login",(req,res)=>{
+router.post("/student-login", async (req, res) => {
 
-const {studentID,password} = req.body;
+  try {
 
-let users = readUsers();
+    const { studentID, password } = req.body;
 
-const student = users.find(
-u => u.studentID===studentID && u.password===password && u.role==="student"
-);
+    const student =
+      await User.findOne({
+        studentID,
+        role: "student"
+      });
 
-if(student){
+    if (!student) {
 
-let logs = readLogs();
+      return res.json({
+        message: "Invalid credentials"
+      });
 
-logs.push({
-studentID:studentID,
-action:"student login",
-time:new Date().toLocaleString()
-});
+    }
 
-saveLogs(logs);
+    const isMatch =
+      await bcrypt.compare(
+        password,
+        student.password
+      );
 
-res.json({message:"success"});
+    if (!isMatch) {
 
-}else{
+      return res.json({
+        message: "Invalid credentials"
+      });
 
-res.json({message:"Invalid credentials"});
+    }
 
-}
+    const token = jwt.sign(
+
+      {
+        id: student._id,
+        role: student.role
+      },
+
+      "jwtSecretKey",
+
+      {
+        expiresIn: "1h"
+      }
+
+    );
+
+    res.cookie("token", token);
+
+    req.session.user = {
+      id: student._id,
+      role: student.role
+    };
+
+    res.json({
+      message: "success",
+      token
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
 
 });
 

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMess - Monthly Bill</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+      color: #111827;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 12px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      flex-wrap: nowrap;
+      overflow: hidden;
+    }
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 1;
+      min-width: 0;
+    }
+    .logo {
+      font-weight: 600;
+      font-size: 20px;
+      color: #333;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .logo i {
+      margin-right: 6px;
+      color: #4f46e5;
+    }
+    .student-portal {
+      background: #eef2ff;
+      color: #3b82f6;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .navbar-right {
+      font-size: 14px;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 1;
+      min-width: 0;
+      white-space: nowrap;
+    }
+    .navbar-right a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 500;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .dashboard {
+      padding: 35px 60px 10px;
+    }
+    .dashboard h1 {
+      font-size: 26px;
+      margin: 0;
+      font-weight: 600;
+    }
+    .dashboard p {
+      color: #6b7280;
+      font-size: 15px;
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+      background: #fff;
+      width: 950px;
+      padding: 10px 30px;
+      border-radius: 25px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      gap: 200px;
+      flex-wrap: wrap;
+    }
+    .tabs a {
+      text-decoration: none;
+      color: #111;
+      font-weight: 500;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bill-box {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin: 30px auto;
+      padding: 25px;
+      max-width: 950px;
+    }
+    .bill-header {
+      font-size: 17px;
+      font-weight: 600;
+      color: #111;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bill-header i { color: #16a34a; }
+
+    .month-cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    .month-card {
+      flex: 1;
+      border-radius: 12px;
+      padding: 20px;
+      color: #fff;
+      font-weight: 500;
+      min-width: 200px;
+    }
+    .current {
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+    }
+    .previous {
+      background: #f3f4f6;
+      color: #111827;
+    }
+    .month-card h2 {
+      font-size: 28px;
+      margin: 8px 0 5px;
+    }
+    .month-card p { font-size: 14px; margin: 0; color: inherit; }
+
+    .breakdown { margin-bottom: 20px; }
+    .breakdown h3 { font-size: 15px; margin-bottom: 12px; font-weight: 600; }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      background: #f9fafb;
+      padding: 12px 18px;
+      border-radius: 12px;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+    .total {
+      display: flex;
+      justify-content: space-between;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      color: #3b82f6;
+    }
+    .pay-btn {
+      display: block;
+      width: 100%;
+      padding: 10px 12px;
+      background: #16a34a;
+      color: #fff;
+      font-weight: 500;
+      font-size: 15px;
+      text-align: center;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .pay-btn:hover { background: #15803d; }
+
+    @media (max-width: 1024px) {
+      .tabs { width: 90%; gap: 50px; padding: 10px 20px; }
+      .bill-box { width: 90%; padding: 20px; }
+      .month-cards { gap: 15px; }
+    }
+    @media (max-width: 768px) {
+      .dashboard { padding: 25px 20px 10px; }
+      .tabs { flex-direction: row; justify-content: space-around; gap: 20px; padding: 10px; }
+      .month-cards { flex-direction: column; }
+      .item, .total { flex-direction: column; align-items: flex-start; gap: 6px; }
+    }
+    @media (max-width: 480px) {
+      .tabs { flex-direction: column; width: 95%; text-align: center; gap: 15px; padding: 15px; }
+      .tabs a { font-size: 13px; justify-content: center; }
+      .bill-box { padding: 15px; width: 95%; }
+      .month-card h2 { font-size: 22px; }
+      .item, .total { flex-direction: column; align-items: flex-start; gap: 5px; }
+      .pay-btn { padding: 12px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="navbar-left">
+      <div class="logo"><i class="fas fa-utensils"></i> UMESS</div>
+      <div class="student-portal">Student Portal</div>
+    </div>
+    <div class="navbar-right">
+      <a href="#" onclick="logout()">
+  <i class="fas fa-sign-out-alt"></i> Logout
+</a>
+    </div>
+  </div>
+
+  <div class="dashboard">
+    <h1>Student Dashboard</h1>
+    <p>Manage your meals, attendance, and feedback</p>
+  </div>
+
+  <div class="tabs">
+    <a href="studentdashboard.html"><i class="fas fa-utensils"></i> Meals</a>
+    <a href="attendence.html"><i class="fa-regular fa-calendar"></i> Attendance</a>
+    <a href="bill.html"><i class="fa-regular fa-file"></i> Bill</a>
+    <a href="feedback.html"><i class="fa-regular fa-message"></i> Feedback</a>
+  </div>
+
+  <div class="bill-box">
+    <div class="bill-header"><i class="fa-regular fa-file"></i> Monthly Bill</div>
+
+    <div class="month-cards">
+      <div class="month-card current">
+        <div>Current Month</div>
+        <h2>₹2,450</h2>
+        <p>23 meals consumed</p>
+      </div>
+      <div class="month-card previous">
+        <div>Previous Month</div>
+        <h2>₹2,850</h2>
+        <p>28 meals consumed</p>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <h3>Bill Breakdown</h3>
+      <div class="item">
+        <span id="breakfastText"></span>
+<span id="breakfastAmount"></span>
+      </div>
+      <div class="item">
+       <span id="lunchText"></span>
+<span id="lunchAmount"></span>
+      </div>
+      <div class="item">
+        <span id="dinnerText"></span>
+<span id="dinnerAmount"></span>
+      </div>
+    </div>
+
+    <div class="total">
+     <span>Total</span>
+<span id="totalAmount"></span>
+    </div>
+
+    <button class="pay-btn">Pay Now</button>
+  </div>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+
+const socket = io();
+
+const token =
+localStorage.getItem("token");
+
+
+
+
+// LOGOUT
+
+function logout(){
+
+localStorage.removeItem(
+"token"
+);
+
+window.location.href =
+"/login.html";
+
+}
+
+
+
+
+// LOAD BILL
+
+async function loadBill(){
+
+try{
+
+document.getElementById(
+"totalAmount"
+).innerText =
+"Loading...";
+
+
+
+const res =
+await fetch(
+
+"/api/bill",
+
+{
+
+headers:{
+
+"Authorization":
+token
+
+}
+
+});
+
+
+
+
+if(!res.ok)
+
+throw new Error(
+"Failed to fetch bill"
+);
+
+
+
+
+const data =
+await res.json();
+
+
+
+
+// CALCULATIONS
+
+const breakfastAmount =
+data.breakfast * 25;
+
+const lunchAmount =
+data.lunch * 45;
+
+const dinnerAmount =
+data.dinner * 40;
+
+const total =
+
+breakfastAmount +
+
+lunchAmount +
+
+dinnerAmount;
+
+
+
+
+// UI UPDATE
+
+document.getElementById(
+"breakfastText"
+).innerText =
+
+"Breakfast (" +
+data.breakfast +
+" times)";
+
+
+
+
+document.getElementById(
+"lunchText"
+).innerText =
+
+"Lunch (" +
+data.lunch +
+" times)";
+
+
+
+
+document.getElementById(
+"dinnerText"
+).innerText =
+
+"Dinner (" +
+data.dinner +
+" times)";
+
+
+
+
+document.getElementById(
+"breakfastAmount"
+).innerText =
+
+"₹ " +
+breakfastAmount;
+
+
+
+
+document.getElementById(
+"lunchAmount"
+).innerText =
+
+"₹ " +
+lunchAmount;
+
+
+
+
+document.getElementById(
+"dinnerAmount"
+).innerText =
+
+"₹ " +
+dinnerAmount;
+
+
+
+
+document.getElementById(
+"totalAmount"
+).innerText =
+
+"₹ " +
+total;
+
+
+
+
+
+}catch(err){
+
+document.getElementById(
+"totalAmount"
+).innerText =
+
+"Error loading bill";
+
+}
+
+}
+
+
+
+
+
+// SOCKET.IO REALTIME
+
+socket.on(
+
+"billUpdated",
+
+(data)=>{
+
+console.log(
+data.message
+);
+
+loadBill();
+
+}
+
+);
+
+
+
+
+// PAY BUTTON
+
+document.querySelector(
+".pay-btn"
+).addEventListener(
+
+"click",
+
+()=>{
+
+alert(
+"Payment feature coming soon 🚀"
+);
+
+}
+
+);
+
+
+
+
+loadBill();
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UMESS Portal</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:#eef2ff;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+width:360px;
+background:white;
+padding:26px;
+border-radius:18px;
+box-shadow:0 8px 20px rgba(0,0,0,0.08);
+text-align:center;
+}
+
+.logo{
+font-size:26px;
+font-weight:500;
+color:#4a3aff;
+margin-bottom:8px;
+display:flex;
+justify-content:center;
+align-items:center;
+gap:8px;
+}
+
+.logo i{
+font-size:32px;
+}
+
+.subtitle{
+font-size:14px;
+color:#666;
+margin-bottom:30px;
+}
+
+h2{
+font-size:20px;
+font-weight:500;
+margin-bottom:22px;
+}
+
+.role-switch{
+display:flex;
+gap:12px;
+margin-bottom:18px;
+}
+
+.role-btn{
+flex:1;
+height:78px;
+border:1px solid #ddd;
+border-radius:14px;
+background:white;
+cursor:pointer;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+font-size:14px;
+gap:8px;
+transition:0.3s;
+}
+
+.role-btn i{
+font-size:14px;
+}
+
+.role-btn.active{
+background:#4a3aff;
+color:white;
+border:none;
+box-shadow:0 8px 14px rgba(74,58,255,0.25);
+}
+
+.tab-switch{
+display:flex;
+background:#ececf1;
+padding:4px;
+border-radius:18px;
+margin-bottom:20px;
+}
+
+.tab-btn{
+flex:1;
+padding:10px;
+border:none;
+background:transparent;
+border-radius:14px;
+cursor:pointer;
+font-size:14px;
+}
+
+.tab-btn.active{
+background:white;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.form-box{
+display:none;
+text-align:left;
+}
+
+.form-box.active{
+display:block;
+}
+
+label{
+font-size:14px;
+font-weight:500;
+margin-bottom:6px;
+display:block;
+margin-top:12px;
+}
+
+input{
+width:100%;
+padding:14px;
+border:1px solid #ddd;
+border-radius:12px;
+background:#f5f5f7;
+font-size:14px;
+box-sizing:border-box;
+margin-bottom:8px;
+}
+
+input:focus{
+outline:none;
+border-color:#4a3aff;
+}
+
+.btn{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#4a3aff;
+color:white;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+margin-top:12px;
+box-shadow:0 8px 14px rgba(74,58,255,0.25);
+}
+
+.support{
+margin-top:22px;
+font-size:14px;
+color:#777;
+text-align:center;
+}
+
+.support i{
+margin-right:6px;
+font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="logo">
+<i class="fa-solid fa-utensils"></i> UMESS
+</div>
+<div class="subtitle">Access your mess management portal</div>
+
+<h2 id="mainTitle">Welcome Back</h2>
+
+<div class="role-switch">
+<button class="role-btn active" id="adminBtn" onclick="setRole('admin')">
+<i class="fa-solid fa-shield-halved"></i>
+<span>Admin/Staff</span>
+</button>
+
+<button class="role-btn" id="studentBtn" onclick="setRole('student')">
+<i class="fa-solid fa-graduation-cap"></i>
+<span>Student</span>
+</button>
+</div>
+
+<div class="tab-switch">
+<button class="tab-btn active" id="loginTab" onclick="setTab('login')">Login</button>
+<button class="tab-btn" id="signupTab" onclick="setTab('signup')">Sign Up</button>
+</div>
+
+<!-- LOGIN -->
+<div id="loginForm" class="form-box active">
+
+<div id="adminLoginFields">
+<label>Email</label>
+<input id="adminEmail" type="email" placeholder="Enter email">
+
+<label>Password</label>
+<input id="adminPass" type="password" placeholder="Enter password">
+</div>
+
+<div id="studentLoginFields" style="display:none;">
+<label>Student ID</label>
+<input id="stuID" type="text" placeholder="Enter student ID">
+
+<label>Password</label>
+<input id="stuPass" type="password" placeholder="Enter password">
+</div>
+
+<button class="btn" onclick="loginUser()">Login</button>
+
+</div>
+
+<!-- SIGNUP -->
+<div id="signupForm" class="form-box">
+
+<div id="adminSignupFields">
+<label>Full Name</label>
+<input id="adminName" type="text" placeholder="Enter full name">
+
+<label>Email</label>
+<input id="adminSignupEmail" type="email" placeholder="Enter email">
+
+<label>Password</label>
+<input id="adminSignupPass" type="password" placeholder="Create password">
+
+<label>Confirm Password</label>
+<input id="adminConfirmPass" type="password" placeholder="Confirm password">
+</div>
+
+<div id="studentSignupFields" style="display:none;">
+<label>Student ID</label>
+<input id="studentSignupID" type="text" placeholder="Enter student ID">
+
+<label>Password</label>
+<input id="studentSignupPass" type="password" placeholder="Create password">
+
+<label>Confirm Password</label>
+<input id="studentConfirmPass" type="password" placeholder="Confirm password">
+</div>
+
+<button class="btn" onclick="signupUser()">Create Account</button>
+
+</div>
+
+<div class="support">
+<i class="fa-solid fa-headset"></i>
+Need help? Contact IT Support
+</div>
+
+</div>
+
+<script>
+
+let currentRole="admin";
+let currentTab="login";
+
+function setRole(role){
+currentRole=role;
+
+document.getElementById("adminBtn").classList.remove("active");
+document.getElementById("studentBtn").classList.remove("active");
+
+if(role==="admin"){
+document.getElementById("adminBtn").classList.add("active");
+}else{
+document.getElementById("studentBtn").classList.add("active");
+}
+
+updateForms();
+}
+
+function setTab(tab){
+currentTab=tab;
+
+document.getElementById("loginTab").classList.remove("active");
+document.getElementById("signupTab").classList.remove("active");
+
+if(tab==="login"){
+document.getElementById("loginTab").classList.add("active");
+document.getElementById("mainTitle").innerText="Welcome Back";
+}else{
+document.getElementById("signupTab").classList.add("active");
+document.getElementById("mainTitle").innerText="Create Account";
+}
+
+updateForms();
+}
+
+function updateForms(){
+
+document.getElementById("loginForm").classList.remove("active");
+document.getElementById("signupForm").classList.remove("active");
+
+if(currentTab==="login"){
+document.getElementById("loginForm").classList.add("active");
+}else{
+document.getElementById("signupForm").classList.add("active");
+}
+
+document.getElementById("adminLoginFields").style.display=
+(currentRole==="admin" && currentTab==="login")?"block":"none";
+
+document.getElementById("studentLoginFields").style.display=
+(currentRole==="student" && currentTab==="login")?"block":"none";
+
+document.getElementById("adminSignupFields").style.display=
+(currentRole==="admin" && currentTab==="signup")?"block":"none";
+
+document.getElementById("studentSignupFields").style.display=
+(currentRole==="student" && currentTab==="signup")?"block":"none";
+}
+
+async function loginUser(){
+
+const res=await fetch("/api/users");
+const users=await res.json();
+
+if(currentRole==="admin"){
+
+const email=document.getElementById("adminEmail").value;
+const pass=document.getElementById("adminPass").value;
+
+const user=users.find(
+u=>u.email===email &&
+u.password===pass &&
+u.role==="admin"
+);
+
+if(!user){
+alert("Invalid login");
+return;
+}
+
+localStorage.setItem("token","admin123");
+window.location.href="/admin_dashboard.html";
+
+}else{
+
+const id=document.getElementById("stuID").value;
+const pass=document.getElementById("stuPass").value;
+
+const user=users.find(
+u=>u.studentID===id &&
+u.password===pass &&
+u.role==="student"
+);
+
+if(!user){
+alert("Invalid login");
+return;
+}
+
+localStorage.setItem("token","student123");
+window.location.href="/studentdashboard.html";
+}
+}
+
+async function signupUser(){
+
+if(currentRole==="admin"){
+
+const name=document.getElementById("adminName").value;
+const email=document.getElementById("adminSignupEmail").value;
+const password=document.getElementById("adminSignupPass").value;
+const confirm=document.getElementById("adminConfirmPass").value;
+
+if(password!==confirm){
+alert("Passwords do not match");
+return;
+}
+
+await fetch("/api/users",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name,
+email,
+password,
+role:"admin"
+})
+});
+
+alert("Admin account created");
+
+}else{
+
+const studentID=document.getElementById("studentSignupID").value;
+const password=document.getElementById("studentSignupPass").value;
+const confirm=document.getElementById("studentConfirmPass").value;
+
+if(password!==confirm){
+alert("Passwords do not match");
+return;
+}
+
+await fetch("/api/users",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+studentID,
+password,
+role:"student"
+})
+});
+
+alert("Student account created");
+}
+
+setTab("login");
+}
+
+updateForms();
+
+</script>
+
+</body>
+</html>

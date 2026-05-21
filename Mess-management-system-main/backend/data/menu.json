@@ -21,12 +21,22 @@
       "name": "Dal",
       "price": 20,
       "category": "Veg"
+    },
+    {
+      "name": "Naan",
+      "price": "15",
+      "category": "Veg"
     }
   ],
   "dinner": [
     {
       "name": "Chapati",
       "price": 20,
+      "category": "Veg"
+    },
+    {
+      "name": "dal",
+      "price": "10",
       "category": "Veg"
     }
   ]

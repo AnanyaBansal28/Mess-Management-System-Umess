@@ -1,40 +1,56 @@
+const bcrypt = require("bcryptjs");
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
 
 const router = express.Router();
 
-const filePath = path.join(__dirname, "../data/users.json");
+const User = require("../models/User");
 
 
 // GET users
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
 
-    const data = JSON.parse(
-        fs.readFileSync(filePath)
-    );
-
-    res.json(data);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message
+    });
+  }
 });
 
 
-// POST user
-router.post("/", (req, res) => {
+// POST signup
+router.post("/", async (req, res) => {
 
-    const data = JSON.parse(
-        fs.readFileSync(filePath)
+  try {
+
+    const data = req.body;
+
+    // HASH PASSWORD
+    const salt = await bcrypt.genSalt(10);
+
+    data.password = await bcrypt.hash(
+      data.password,
+      salt
     );
 
-    const newUser = req.body;
+    const newUser = new User(data);
 
-    data.push(newUser);
+    await newUser.save();
 
-    fs.writeFileSync(
-        filePath,
-        JSON.stringify(data, null, 2)
-    );
+    res.json({
+      message: "User registered successfully"
+    });
 
-    res.json(newUser);
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
 });
 
 module.exports = router;

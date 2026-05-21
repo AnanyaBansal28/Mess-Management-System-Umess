@@ -1,50 +1,146 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
 
 const router = express.Router();
 
-const filePath = path.join(__dirname, "../data/meal.json");
+const Meal = require("../models/Meal");
+
+const Attendance =
+require("../models/Attendance");
+
+
 
 
 // GET meal
-router.get("/", (req, res) => {
-    try {
-        const data = fs.readFileSync(filePath);
-        res.json(JSON.parse(data));
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+
+router.get("/", async (req, res) => {
+
+  try {
+
+    const data =
+    await Meal.find();
+
+    res.json(data);
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
 });
+
+
 
 
 // POST meal
-router.post("/", (req, res) => {
-    try {
 
-        const { meal } = req.body;
+router.post("/", async (req, res) => {
 
-        const data = JSON.parse(
-            fs.readFileSync(filePath)
-        );
+  try {
 
-        const newMeal = {
-            id: Date.now(),
-            meal: meal
-        };
+    const { meal } =
+    req.body;
 
-        data.push(newMeal);
 
-        fs.writeFileSync(
-            filePath,
-            JSON.stringify(data, null, 2)
-        );
 
-        res.json(newMeal);
 
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+
+    // SAVE MEAL
+
+    const newMeal =
+    new Meal({
+
+      meal: meal
+
+    });
+
+    await newMeal.save();
+
+
+
+
+
+    // ATTENDANCE LOGIC
+
+    const today =
+
+    new Date()
+    .toISOString()
+    .split("T")[0];
+
+
+
+    const exists =
+
+    await Attendance.findOne({
+
+      date: today
+
+    });
+
+
+
+
+    if (!exists) {
+
+      const newAttendance =
+      new Attendance({
+
+        date: today,
+
+        status: "Present"
+
+      });
+
+      await newAttendance.save();
+
     }
+
+
+
+
+
+    // SOCKET.IO
+
+    const io =
+    req.app.get("io");
+
+
+
+    io.emit(
+
+      "billUpdated",
+
+      {
+
+        message:
+        "Bill Updated"
+
+      }
+
+    );
+
+
+
+
+
+    res.json(newMeal);
+
+
+
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
 });
+
+
 
 module.exports = router;

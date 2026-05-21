@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Tracking</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script src="/socket.io/socket.io.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Segoe UI',Arial,sans-serif;
+background:#f8f9fc;
+color:#1f2937;
+}
+
+
+
+/* HEADER */
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 30px;
+background:white;
+box-shadow:0 2px 10px rgba(0,0,0,0.06);
+position:sticky;
+top:0;
+z-index:100;
+}
+
+header h2{
+font-size:24px;
+color:#4a3aff;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+
+
+/* BUTTON */
+
+.btn-purple{
+background:#4a3aff;
+color:white;
+padding:12px 18px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-size:14px;
+font-weight:600;
+text-decoration:none;
+transition:0.3s;
+box-shadow:0 8px 16px rgba(74,58,255,0.2);
+}
+
+.btn-purple:hover{
+transform:translateY(-2px);
+}
+
+
+
+/* MAIN */
+
+.container{
+max-width:1100px;
+margin:30px auto;
+padding:20px;
+}
+
+
+
+/* SECTION */
+
+.students{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.students h3{
+font-size:22px;
+margin-bottom:20px;
+}
+
+
+
+/* STUDENT CARD */
+
+.student-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px;
+margin-bottom:14px;
+border:1px solid #eee;
+border-radius:14px;
+transition:0.3s;
+background:#fafafa;
+}
+
+.student-card:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 18px rgba(0,0,0,0.05);
+}
+
+.student-info strong{
+font-size:16px;
+}
+
+.student-info p{
+font-size:14px;
+color:#666;
+margin-top:5px;
+}
+
+
+
+/* MEAL BADGES */
+
+.meal-status{
+display:flex;
+gap:8px;
+}
+
+.badge{
+padding:8px 12px;
+border-radius:20px;
+font-size:13px;
+font-weight:600;
+}
+
+.yes{
+background:#dcfce7;
+color:#16a34a;
+}
+
+.no{
+background:#fee2e2;
+color:#dc2626;
+}
+
+
+
+/* POPUP */
+
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.overlay:target{
+display:flex;
+}
+
+.popup{
+background:white;
+padding:30px;
+border-radius:20px;
+width:380px;
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+animation:popupIn 0.3s ease;
+}
+
+.popup h3{
+margin-bottom:20px;
+text-align:center;
+font-size:22px;
+}
+
+.popup input,
+.popup select{
+width:100%;
+padding:14px;
+margin-bottom:14px;
+font-size:14px;
+border:1px solid #ddd;
+border-radius:12px;
+background:#f9fafb;
+}
+
+.popup input:focus,
+.popup select:focus{
+outline:none;
+border-color:#4a3aff;
+}
+
+.close-btn{
+background:#ef4444;
+margin-top:10px;
+}
+
+.close-btn:hover{
+background:#dc2626;
+}
+
+
+
+/* ANIMATION */
+
+@keyframes popupIn{
+
+from{
+opacity:0;
+transform:scale(0.9);
+}
+
+to{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h2>
+
+<i class="fa-solid fa-user-check"></i>
+Attendance Tracking
+
+</h2>
+
+<a href="#markAttendance"
+class="btn-purple">
+
+<i class="fa-solid fa-plus"></i>
+Mark Attendance
+
+</a>
+
+</header>
+
+
+
+<div class="container">
+
+<div class="students">
+
+<h3>
+Student Attendance
+</h3>
+
+<div id="studentList"></div>
+
+</div>
+
+</div>
+
+
+
+
+
+<!-- POPUP -->
+
+<div id="markAttendance"
+class="overlay">
+
+<div class="popup">
+
+<h3>
+Mark Attendance
+</h3>
+
+<input
+id="rollInput"
+placeholder="Enter Student ID">
+
+<select id="mealSelect">
+
+<option value="">
+Select Meal
+</option>
+
+<option>
+Breakfast
+</option>
+
+<option>
+Lunch
+</option>
+
+<option>
+Dinner
+</option>
+
+</select>
+
+<button
+class="btn-purple"
+onclick="markAttendance()">
+
+Save Attendance
+
+</button>
+
+<button
+class="btn-purple close-btn"
+onclick="closePopup()">
+
+Close
+
+</button>
+
+</div>
+
+</div>
+
+
+
+
+
+<script>
+
+const socket = io();
+
+
+
+// CLOSE POPUP
+
+function closePopup(){
+
+window.location.hash="";
+
+}
+
+
+
+
+// LOAD STUDENTS
+
+async function loadStudents(){
+
+const res =
+await fetch(
+"/api/attendencetracking"
+);
+
+const data =
+await res.json();
+
+const list =
+document.getElementById(
+"studentList"
+);
+
+list.innerHTML="";
+
+
+
+data.forEach(s=>{
+
+let meals="";
+
+
+
+meals += s.breakfast
+
+? "<span class='badge yes'>Breakfast</span>"
+
+: "<span class='badge no'>Breakfast</span>";
+
+
+
+meals += s.lunch
+
+? "<span class='badge yes'>Lunch</span>"
+
+: "<span class='badge no'>Lunch</span>";
+
+
+
+meals += s.dinner
+
+? "<span class='badge yes'>Dinner</span>"
+
+: "<span class='badge no'>Dinner</span>";
+
+
+
+const div =
+document.createElement("div");
+
+div.className=
+"student-card";
+
+
+
+div.innerHTML=`
+
+<div class="student-info">
+
+<strong>
+${s.name}
+</strong>
+
+<p>
+ID: ${s.roll}
+</p>
+
+</div>
+
+<div class="meal-status">
+
+${meals}
+
+</div>
+
+`;
+
+
+
+list.appendChild(div);
+
+});
+
+}
+
+
+
+
+// MARK ATTENDANCE
+
+async function markAttendance(){
+
+const roll =
+
+document.getElementById(
+"rollInput"
+).value.trim();
+
+
+
+const meal =
+
+document.getElementById(
+"mealSelect"
+).value.trim();
+
+
+
+
+if(!roll || !meal){
+
+alert("Fill all fields");
+
+return;
+
+}
+
+
+
+
+await fetch(
+
+"/api/attendencetracking",
+
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+roll,
+meal
+})
+
+});
+
+
+
+
+alert(
+"Attendance saved"
+);
+
+
+
+
+loadStudents();
+
+
+
+
+document.getElementById(
+"rollInput"
+).value="";
+
+
+
+document.getElementById(
+"mealSelect"
+).value="";
+
+
+
+closePopup();
+
+}
+
+
+
+
+// SOCKET.IO REALTIME
+
+socket.on(
+
+"attendanceUpdated",
+
+(data)=>{
+
+console.log(
+data.message
+);
+
+loadStudents();
+
+}
+
+);
+
+
+
+
+loadStudents();
+
+</script>
+
+</body>
+</html>

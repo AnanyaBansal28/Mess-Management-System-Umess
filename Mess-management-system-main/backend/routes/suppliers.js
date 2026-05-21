@@ -1,28 +1,43 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
 
 const router = express.Router();
 
-const filePath =
-path.join(
-__dirname,
-"../data/suppliers.json"
-);
+const Supplier = require("../models/Supplier");
 
 
 // GET suppliers
+router.get("/", async (req,res)=>{
+  try{
 
-router.get("/", (req,res)=>{
+    const suppliers =
+    await Supplier.find();
 
-const data =
-JSON.parse(
-fs.readFileSync(filePath,"utf-8")
-);
+    res.json(suppliers);
 
-res.json(data);
-
+  }catch(err){
+    res.status(500).json({
+      error: err.message
+    });
+  }
 });
 
+
+// POST supplier
+router.post("/", async (req,res)=>{
+  try{
+
+    const newSupplier =
+    new Supplier(req.body);
+
+    await newSupplier.save();
+
+    res.json(newSupplier);
+
+  }catch(err){
+    res.status(500).json({
+      error: err.message
+    });
+  }
+});
 
 module.exports = router;

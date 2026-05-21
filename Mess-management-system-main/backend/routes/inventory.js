@@ -1,51 +1,92 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
 
 const router = express.Router();
 
-const filePath =
-path.join(__dirname,"../data/inventory.json");
+const Inventory = require("../models/Inventory");
 
 
-// GET
+// GET all inventory items
+router.get("/", async (req,res)=>{
 
-router.get("/", (req,res)=>{
+  try{
 
-const data =
-JSON.parse(
-fs.readFileSync(filePath)
-);
+    const items =
+    await Inventory.find();
 
-res.json(data);
+    res.json(items);
+
+  }catch(err){
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
 
 });
 
 
-// POST update
+// ADD new inventory item
+router.post("/add", async (req,res)=>{
 
-router.post("/", (req,res)=>{
+  try{
 
-const data =
-JSON.parse(
-fs.readFileSync(filePath)
-);
+    const {
+      name,
+      category,
+      stock,
+      price
+    } = req.body;
 
-const {name, stock} = req.body;
+    const newItem =
+    new Inventory({
+      name,
+      category,
+      stock,
+      price
+    });
 
-const item =
-data.find(i=>i.name===name);
+    await newItem.save();
 
-if(item){
-item.stock = stock;
-}
+    res.json(newItem);
 
-fs.writeFileSync(
-filePath,
-JSON.stringify(data,null,2)
-);
+  }catch(err){
 
-res.json(data);
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+});
+
+
+// UPDATE stock
+router.post("/", async (req,res)=>{
+
+  try{
+
+    const {
+      name,
+      stock
+    } = req.body;
+
+    const item =
+    await Inventory.findOneAndUpdate(
+      {name:name},
+      {stock:stock},
+      {new:true}
+    );
+
+    res.json(item);
+
+  }catch(err){
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
 
 });
 

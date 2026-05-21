@@ -1,39 +1,42 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
 
 const router = express.Router();
 
-const mealPath = path.join(__dirname, "../data/meal.json");
+const Meal = require("../models/Meal");
+
 
 // GET bill
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
+    try {
+        const meals = await Meal.find();
 
-    const meals = JSON.parse(
-        fs.readFileSync(mealPath)
-    );
+        let breakfast = 0;
+        let lunch = 0;
+        let dinner = 0;
 
-    let breakfast = 0;
-    let lunch = 0;
-    let dinner = 0;
+        meals.forEach(m => {
+            if (m.meal === "Breakfast") breakfast++;
+            if (m.meal === "Lunch") lunch++;
+            if (m.meal === "Dinner") dinner++;
+        });
 
-    meals.forEach(m => {
-        if (m.meal === "Breakfast") breakfast++;
-        if (m.meal === "Lunch") lunch++;
-        if (m.meal === "Dinner") dinner++;
-    });
+        const bill = {
+            breakfast,
+            lunch,
+            dinner,
+            total:
+                breakfast * 25 +
+                lunch * 45 +
+                dinner * 40
+        };
 
-    const bill = {
-        breakfast,
-        lunch,
-        dinner,
-        total:
-            breakfast * 25 +
-            lunch * 45 +
-            dinner * 40
-    };
+        res.json(bill);
 
-    res.json(bill);
+    } catch (err) {
+        res.status(500).json({
+            error: err.message
+        });
+    }
 });
 
 module.exports = router;

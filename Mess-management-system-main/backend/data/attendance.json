@@ -1,7 +1,26 @@
 [
-  { "date": "2024-12-27", "status": "Present" },
-  { "date": "2024-12-26", "status": "Present" },
-  { "date": "2024-12-25", "status": "Present" },
-  { "date": "2024-12-24", "status": "Present" },
-  { "date": "2024-12-23", "status": "Absent" }
+  {
+    "date": "2024-12-27",
+    "status": "Present"
+  },
+  {
+    "date": "2024-12-26",
+    "status": "Present"
+  },
+  {
+    "date": "2024-12-25",
+    "status": "Present"
+  },
+  {
+    "date": "2024-12-24",
+    "status": "Present"
+  },
+  {
+    "date": "2024-12-23",
+    "status": "Absent"
+  },
+  {
+    "date": "2026-04-27",
+    "status": "Present"
+  }
 ]

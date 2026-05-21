@@ -1,46 +1,70 @@
 const express = require("express");
-const fs = require("fs");
-const path = require("path");
 
 const router = express.Router();
 
-const filePath = path.join(__dirname, "../data/feedback.json");
+const Feedback = require("../models/Feedback");
 
 
-// GET feedback
-router.get("/", (req, res) => {
+// GET all feedback
+router.get("/", async (req,res)=>{
+try{
 
-    const data = JSON.parse(
-        fs.readFileSync(filePath)
-    );
+const data =
+await Feedback.find();
 
-    res.json(data);
+res.json(data);
+
+}catch(err){
+res.status(500).json({
+error:err.message
+});
+}
 });
 
 
-// POST feedback
-router.post("/", (req, res) => {
+// POST new feedback OR update
+router.post("/", async (req,res)=>{
+try{
 
-    const { rating, comment } = req.body;
+// NEW feedback from student
+if(req.body.comment){
 
-    const data = JSON.parse(
-        fs.readFileSync(filePath)
-    );
+const newFeedback =
+new Feedback({
+name:req.body.name || "Student",
+rating:req.body.rating,
+comment:req.body.comment,
+date:new Date().toLocaleDateString(),
+status:"NEW"
+});
 
-    const newFeedback = {
-        rating,
-        comment,
-        date: new Date().toLocaleDateString()
-    };
+await newFeedback.save();
 
-    data.unshift(newFeedback);
+return res.json(newFeedback);
+}
 
-    fs.writeFileSync(
-        filePath,
-        JSON.stringify(data, null, 2)
-    );
 
-    res.json(newFeedback);
+// Admin update feedback
+const {id,status,response} =
+req.body;
+
+const updated =
+await Feedback.findByIdAndUpdate(
+id,
+{
+status,
+response
+},
+{new:true}
+);
+
+res.json(updated);
+
+}catch(err){
+res.status(500).json({
+error:err.message
+});
+}
 });
 
 module.exports = router;

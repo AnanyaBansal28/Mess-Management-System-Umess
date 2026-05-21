@@ -1,75 +1,151 @@
-const express = require("express")
-const fs = require("fs")
-const path = require("path")
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-const filePath =
-path.join(__dirname,"../data/menu.json")
-
-function readMenu(){
-return JSON.parse(
-fs.readFileSync(filePath)
-)
-}
-
-function saveMenu(data){
-fs.writeFileSync(
-filePath,
-JSON.stringify(data,null,2)
-)
-}
+const Menu = require("../models/Menu");
 
 
-router.get("/",(req,res)=>{
-res.json(readMenu())
-})
 
 
-router.post("/add",(req,res)=>{
+// GET MENU
 
-let menu = readMenu()
+router.get("/", async (req, res) => {
 
-const {type,name,price,category} = req.body
+  try {
 
-menu[type].push({name,price,category})
+    const items = await Menu.find();
 
-saveMenu(menu)
+    let menu = {
 
-res.json({msg:"added"})
+      breakfast: [],
+      lunch: [],
+      dinner: []
 
-})
+    };
 
+    items.forEach(item => {
 
-router.post("/delete",(req,res)=>{
+      menu[item.type].push(item);
 
-let menu = readMenu()
+    });
 
-const {type,index} = req.body
+    res.json(menu);
 
-menu[type].splice(index,1)
+  } catch (err) {
 
-saveMenu(menu)
+    res.status(500).json({
+      error: err.message
+    });
 
-res.json({msg:"deleted"})
+  }
 
-})
-
-
-router.post("/edit",(req,res)=>{
-
-let menu = readMenu()
-
-const {type,index,name,price} = req.body
-
-menu[type][index].name=name
-menu[type][index].price=price
-
-saveMenu(menu)
-
-res.json({msg:"edited"})
-
-})
+});
 
 
-module.exports = router
+
+// ADD ITEM WITH IMAGE
+
+router.post("/add", async (req, res) => {
+
+  try {
+
+    const {
+  type,
+  name,
+  price,
+  category,
+  image
+} = req.body;
+
+    const newItem =
+    new Menu({
+
+      type,
+      name,
+      price,
+      category,
+
+      image: image
+
+    });
+
+    await newItem.save();
+
+    res.json({
+      msg: "added"
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+});
+
+
+
+// DELETE ITEM
+
+router.post("/delete", async (req, res) => {
+
+  try {
+
+    const { id } = req.body;
+
+    await Menu.findByIdAndDelete(id);
+
+    res.json({
+      msg: "deleted"
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+});
+
+
+
+// EDIT ITEM
+
+router.post("/edit", async (req, res) => {
+
+  try {
+
+    const {
+      id,
+      name,
+      price
+    } = req.body;
+
+    await Menu.findByIdAndUpdate(id, {
+
+      name,
+      price
+
+    });
+
+    res.json({
+      msg: "edited"
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message
+    });
+
+  }
+
+});
+
+
+
+module.exports = router;
